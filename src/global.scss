@@ -73,6 +73,14 @@
   border: none;
 }
 
+/*
+  -------------- Text --------------
+*/
+
+.line-break{
+  white-space: normal;
+}
+
 
 // http://ionicframework.com/docs/theming/
 
@@ -130,10 +138,6 @@ img.nav-avatar{
       /*padding-left: 16px;*/
     }
   }
-}
-
-.line-break{
-  white-space: normal;
 }
 
 .store-button{
