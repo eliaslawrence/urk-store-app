@@ -1,0 +1,6 @@
+// Screen Orientation
+ionic cordova plugin add cordova-plugin-screen-orientation
+npm install @ionic-native/screen-orientation
+
+// Dependency for screen orientation
+npm install @ionic-native/core --save 
