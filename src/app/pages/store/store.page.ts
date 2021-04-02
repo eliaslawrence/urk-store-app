@@ -68,6 +68,20 @@ export class StorePage implements OnInit {
     this.router.navigate(['store/edit-item'], navigationExtras);
   }
 
+  editTelephone(index) {    
+    let navigationExtras: NavigationExtras = {
+      state : {
+        index     : index,
+        list      : this.store.telephones,
+        name      : 'telephones',
+        pageTitle : 'Telefone',
+        storeId   : this.store.id
+      }      
+    };
+    
+    this.router.navigate(['store/edit-telephone'], navigationExtras);
+  }
+
   editVariable(name, pageTitle, variable, routingPage = 'edit-variable') {
     let navigationExtras: NavigationExtras = {
       state : {

@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'edit-variable',
     loadChildren: () => import('./edit-variable/edit-variable.module').then( m => m.EditVariablePageModule)
+  },
+  {
+    path: 'edit-telephone',
+    loadChildren: () => import('./edit-telephone/edit-telephone.module').then( m => m.EditTelephonePageModule)
   }
 ];
 
