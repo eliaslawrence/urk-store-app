@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-store',
@@ -8,7 +9,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 export class StorePage implements OnInit {
   private store;
 
-  constructor() {
+  constructor(private router : Router        ,) {
     this.store = this.getStore();
   }
 
@@ -53,5 +54,31 @@ export class StorePage implements OnInit {
 
     return store;
   }  
+
+  private editItem(name, pageTitle, item = undefined) {
+    let navigationExtras: NavigationExtras = {
+      state : {
+        conduct   : item,
+        name      : name,
+        pageTitle : pageTitle,
+        patientId : this.store.id
+      }      
+    };
+    
+    this.router.navigate(['store/edit-item'], navigationExtras);
+  }
+
+  editVariable(name, pageTitle, variable, routingPage = 'edit-variable') {
+    let navigationExtras: NavigationExtras = {
+      state : {
+        storeId   : this.store.id,
+        name      : name     ,
+        pageTitle : pageTitle,
+        variable  : variable
+      }
+    };      
+    
+    this.router.navigate(['store/'+routingPage], navigationExtras);
+  }
 
 }

@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: StorePage
+  },
+  {
+    path: 'edit-variable',
+    loadChildren: () => import('./edit-variable/edit-variable.module').then( m => m.EditVariablePageModule)
   }
 ];
 
