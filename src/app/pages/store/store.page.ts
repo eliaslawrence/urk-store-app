@@ -47,7 +47,18 @@ export class StorePage implements OnInit {
           {name: 'Quarta' , selected: false, openingHour: '08:00', closingHour: '16:00'},
           {name: 'Quinta' , selected: false, openingHour: '08:00', closingHour: '16:00'},
           {name: 'Sexta'  , selected: true , openingHour: '08:00', closingHour: '16:00'},
-          {name: 'Sábado' , selected: false, openingHour: '08:00', closingHour: '16:00'}]
+          {name: 'Sábado' , selected: false, openingHour: '08:00', closingHour: '16:00'}],
+        address: {
+            cep          : '24220380',
+            address      : 'Rua Geraldo Martins',
+            number       : '75',
+            complement   : '403',
+            neighborhood : 'Icaraí',
+            city         : 'Niterói',
+            state        : 'Rio de Janeiro',
+            country      : 'Brasil',
+            placeID      : ''
+          }
       };
     }
     /////////////////////////////////////////////////////////END (1)
@@ -66,6 +77,19 @@ export class StorePage implements OnInit {
     };
     
     this.router.navigate(['store/edit-item'], navigationExtras);
+  }
+
+  editAddress() {       
+    let navigationExtras: NavigationExtras = {
+      state : {
+        address   : this.store.address,
+        name      : 'address',
+        pageTitle : 'Endereço',
+        storeId   : this.store.id
+      }      
+    };
+    
+    this.router.navigate(['store/edit-address'], navigationExtras);
   }
 
   editTelephone(index) {    

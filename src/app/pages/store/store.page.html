@@ -57,15 +57,13 @@
         Endereço
       </ion-label>      
     </ion-item-divider>
-    <ion-item (click)="openEditAddressPage()" *ngIf="store" lines="full">
-      <!-- <h2>{{store.address.address}} {{store.address.number}}{{store.address.complement ? ', ' + store.address.complement : ''}}</h2>
-      <p>{{store.address.cep}} - {{store.address.city}} - {{store.address.state }}</p> -->
+    <ion-item (click)="editAddress()" *ngIf="store.address" lines="none">
       <ion-label>
-        <h2>Rua Fantasia 22</h2>
-        <p>22222222 - Cidade - Estado</p>
+        <h2>{{store.address.address}} {{store.address.number}}{{store.address.complement ? ', ' + store.address.complement : ''}}</h2>
+        <p>{{store.address.cep}} - {{store.address.city}} - {{store.address.state }}</p>
       </ion-label>      
     </ion-item>
-    <ion-item (click)="openEditAddressPage()" *ngIf="!store.address" lines="none">
+    <ion-item (click)="editAddress()" *ngIf="!store.address" lines="none">
       <ion-label>
         <p>Adicionar endereço</p>
       </ion-label>        
