@@ -35,7 +35,7 @@ export class HomePage implements OnInit {
   }
 
   login() {
-    this.navCtrl.navigateRoot(''); 
+    this.navCtrl.navigateRoot('store'); 
   }
 
 }

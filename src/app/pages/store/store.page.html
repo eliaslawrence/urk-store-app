@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Minha Loja</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="crop-image-container" (click)="presentActionSheet()">
+    <img src="assets/imgs/loja.jpg" />
+    <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->
+    <!-- <img [src]="storeProvider.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/sm.jpg'"/> -->
+    <div class="card-title">{{store ? store.name : 'Loja'}}</div>
+  </ion-card>
+  
+
+  <ion-list>
+    <ion-item-divider color="light" class="border-none">
+      <ion-label>
+        Dados da loja
+      </ion-label>
+    </ion-item-divider>
+    <ion-item (click)="showNameModal()" lines="full">
+      <ion-label>
+        <h2>Nome</h2>
+        <p>{{store ? store.name : ''}}</p>
+      </ion-label>       
+    </ion-item>
+    <ion-item (click)="showAccountNameModal()" lines="none">
+      <ion-label>
+        <h2>Nome da conta</h2>
+        <p>@{{store ? store.accountName : ''}}</p>
+      </ion-label>      
+    </ion-item>    
+    <ion-item-divider color="light" class="border-none">
+      <ion-label>
+        Telefones
+      </ion-label>      
+    </ion-item-divider>
+    <span *ngIf="store">
+      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="showTelephoneModal(i)" lines="full">
+        <ion-label>
+          <h2>{{telephone}}</h2>
+        </ion-label>        
+      </ion-item>
+    </span>    
+    <ion-item (click)="showTelephoneModal(-1)" lines="none">
+      <ion-label>
+        <p>Adicionar telefone</p>
+      </ion-label>      
+    </ion-item>
+
+    <ion-item-divider color="light"  class="border-none">
+      <ion-label>
+        Endereço
+      </ion-label>      
+    </ion-item-divider>
+    <ion-item (click)="openEditAddressPage()" *ngIf="store" lines="full">
+      <!-- <h2>{{store.address.address}} {{store.address.number}}{{store.address.complement ? ', ' + store.address.complement : ''}}</h2>
+      <p>{{store.address.cep}} - {{store.address.city}} - {{store.address.state }}</p> -->
+      <ion-label>
+        <h2>Rua Fantasia 22</h2>
+        <p>22222222 - Cidade - Estado</p>
+      </ion-label>      
+    </ion-item>
+    <ion-item (click)="openEditAddressPage()" *ngIf="!store.address" lines="none">
+      <ion-label>
+        <p>Adicionar endereço</p>
+      </ion-label>        
+    </ion-item>
+  </ion-list>
+</ion-content>
