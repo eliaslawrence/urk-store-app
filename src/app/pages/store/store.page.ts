@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { PopoverController } from '@ionic/angular';
+import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 
 @Component({
   selector: 'app-store',
@@ -9,7 +11,8 @@ import { NavigationExtras, Router } from '@angular/router';
 export class StorePage implements OnInit {
   private store;
 
-  constructor(private router : Router        ,) {
+  constructor(private router           : Router,
+              private popoverController: PopoverController,) {
     this.store = this.getStore();
   }
 
@@ -28,6 +31,7 @@ export class StorePage implements OnInit {
     //TODO: get store from DB (1)
     if(!store){
       store = {
+        image: {src: 'assets/imgs/loja.jpg', name: 'cover.jpg'},
         categories: [{name: 'Alimentos', code: '1'},
           {name: 'Variados' , code: '2'}],
         paymentOptions: [
@@ -117,6 +121,17 @@ export class StorePage implements OnInit {
     };      
     
     this.router.navigate(['store/'+routingPage], navigationExtras);
+  }
+
+  async addPhoto(){
+    const popover = await this.popoverController.create({
+      component: AddPhotoComponent,
+      componentProps: {store: this.store},
+      showBackdrop: true,
+      cssClass: 'custom-popover'
+    });    
+
+    return await popover.present();    
   }
 
 }
