@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Platform, LoadingController, ActionSheetController, ToastController, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { AddPhotoComponent } from './components/add-photo/add-photo.component';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 @Component({
   selector: 'app-edit-photos',
@@ -16,14 +15,11 @@ export class EditPhotosPage implements OnInit {
 
   constructor(private router : Router,
               private route  : ActivatedRoute,
-              // private camera: Camera,
-              // private file: File,
               // private platform: Platform,
               // private requestProvider: RequestProvider,
               // private loadingCtrl: LoadingController,
               // private toastCtrl: ToastController,
-              public popoverController: PopoverController,
-              private transfer: FileTransfer
+              public popoverController: PopoverController
               ) { }
 
   ngOnInit() {
@@ -58,33 +54,5 @@ export class EditPhotosPage implements OnInit {
     }else{
       this.imgSelectedIndex = -1;
     }
-  }
-
-  save() {
-    let imgToUpload = this.product.images[this.imgSelectedIndex];
-
-    var options = {
-      fileKey: "image",
-      fileName: imgToUpload.name,
-      chunkedMode: false,
-      mimeType: "multipart/form-data",
-      // params : {'fileName': this.lastImage.name}
-    };
-   
-    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-    // this.loading = this.loadingCtrl.create({
-    //   content: 'Uploading...',
-    // });
-    // this.loading.present();
-   
-    // Use the FileTransfer to upload the image
-    fileTransfer.upload(imgToUpload.src, 'http://192.168.15.5:1337/test/upload', options).then(data => {
-      console.log(data);
-      // this.loading.dismissAll()
-    }, err => {
-      console.log(err);
-      // this.loading.dismissAll()
-    });
   }
 }
