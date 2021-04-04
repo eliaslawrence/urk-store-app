@@ -3,6 +3,7 @@ import { NavParams, Platform, PopoverController } from '@ionic/angular';
 import { Camera } from '@ionic-native/camera/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-photo',
@@ -140,7 +141,7 @@ export class AddPhotoComponent implements OnInit {
     // this.loading.present();
    
     // Use the FileTransfer to upload the image
-    fileTransfer.upload(fileSrc, 'http://192.168.15.5:1337/test/upload', options).then(data => {
+    fileTransfer.upload(fileSrc, environment.urlServer + 'test/upload', options).then(data => {
       console.log(data);
       // this.loading.dismissAll()
     }, err => {
