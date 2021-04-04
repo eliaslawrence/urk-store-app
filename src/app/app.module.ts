@@ -8,10 +8,13 @@ import { AppComponent } from './app.component';
 
 //START: Module
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http"; // HTTP
+import { IonicStorageModule } from '@ionic/storage-angular';
 //END: Module
 
 //START: Provider
-import {ScreenOrientation} from "@ionic-native/screen-orientation/ngx";
+import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 //END: Provider
 
 @NgModule({
@@ -20,10 +23,13 @@ import {ScreenOrientation} from "@ionic-native/screen-orientation/ngx";
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
-    AppRoutingModule
+    AppRoutingModule,    
+    HttpClientModule,
+    IonicStorageModule.forRoot()
   ],
   providers: [
     ScreenOrientation,
+    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

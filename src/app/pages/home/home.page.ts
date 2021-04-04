@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { AuthenticateService } from 'src/app/services/authenticate/authenticate.service';
+import { Storage } from "@ionic/storage-angular";
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,9 @@ export class HomePage implements OnInit {
               private screenOrientation: ScreenOrientation,
               private platform         : Platform,
               private menuCtrl         : MenuController,
-              private navCtrl          : NavController) {  
+              private navCtrl          : NavController,
+              private authService      : AuthenticateService,
+              private storage          : Storage) {  
 
     this.menuCtrl.enable(false);
 
@@ -31,7 +35,7 @@ export class HomePage implements OnInit {
       email:    ['', Validators.required],
       password: ['', Validators.required],
     });
-  }
+  }  
 
   ngOnDestroy(){
     this.menuCtrl.enable(true);
@@ -40,9 +44,25 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
   }
+  
+  async login() {    
+    // this.storage.set('name', 'Elias');
 
-  login() {
-    this.navCtrl.navigateRoot('store'); 
+    try {
+      let res = await this.authService.signin(this.user);
+      console.log(res);
+      this.navCtrl.navigateRoot('store');
+    } catch (error) {
+      console.log(error); 
+    }
+    // this.authService.signin(this.user).then(res => {        
+    //   console.log(res);
+    //   this.navCtrl.navigateRoot('store');
+    //   // this.events.publish('user:logged');          
+    // }, err => {
+    //   console.log(err); 
+    //   // this.navCtrl.navigateRoot('patients');
+    // });     
   }
 
 }
