@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, Platform } from '@ionic/angular';
+import { MenuController, NavController, Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @Component({
@@ -18,7 +18,10 @@ export class HomePage implements OnInit {
               private formBuilder      : FormBuilder,
               private screenOrientation: ScreenOrientation,
               private platform         : Platform,
-              private navCtrl          : NavController) {    
+              private menuCtrl         : MenuController,
+              private navCtrl          : NavController) {  
+
+    this.menuCtrl.enable(false);
 
     if(this.platform.is('android') || this.platform.is('iphone')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
@@ -28,6 +31,10 @@ export class HomePage implements OnInit {
       email:    ['', Validators.required],
       password: ['', Validators.required],
     });
+  }
+
+  ngOnDestroy(){
+    this.menuCtrl.enable(true);
   }
 
   ngOnInit() {
