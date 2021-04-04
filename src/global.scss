@@ -49,6 +49,10 @@
     bottom: 5px;
   }
   
+  .padding-left-0{
+    padding-left: 0;
+  }
+
 /*
   --------------------- Segment TAB ---------------------
 */
@@ -79,6 +83,35 @@
 
 .line-break{
   white-space: normal;
+}
+
+.text-align-center {
+  text-align: center;
+} 
+
+.text-align-justify {
+  text-align: justify;
+} 
+
+/*
+  -------------- Popover --------------
+*/
+
+.custom-popover .popover-content {
+  width: 100%; 
+  top: auto !important;   
+  left: 0px !important;
+  bottom: 0px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.border-none {
+  border: none;
+} 
+
+.text-align-center{
+  text-align: center;
 }
 
 

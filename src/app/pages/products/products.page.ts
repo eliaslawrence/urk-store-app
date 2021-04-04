@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-products',
@@ -10,7 +11,7 @@ export class ProductsPage implements OnInit {
   status = "available";
   products: Array<any>;
 
-  constructor() { 
+  constructor(public navCtrl: NavController) { 
     this.products = this.getProducts();
   }
 
@@ -34,6 +35,15 @@ export class ProductsPage implements OnInit {
     ///////////////////////////////////////////////////////////END (1)
 
     return products;
+  }
+
+  itemTapped(code) {       
+    this.navCtrl.navigateForward('products/product/' + code);
+  }
+
+  async newProduct() {
+    // let newGroup = await this.medGroupService.newMedGroup();
+    // this.groups.push(newGroup);
   }
 
 }

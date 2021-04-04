@@ -58,7 +58,7 @@
             </div>
 
             <div class="same-line">
-              <h2>R$ {{item.price}}</h2> <p> x {{item.qty}}{{item.unity}}</p>
+              <h2>R$ {{item.price}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
             </div>
           </ion-label>
           
@@ -92,7 +92,7 @@
 
     <ion-list *ngSwitchCase="'soldOut'">
       <div *ngFor="let item of products; let i = index">
-        <ion-item lines="full" *ngIf="item.qty <= 0" (click)="itemTapped($event, item, i)">
+        <ion-item lines="full" *ngIf="item.qty <= 0" (click)="itemTapped(item.code)">
           <ion-thumbnail slot="start">
             <img src="{{item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">            
           </ion-thumbnail>
