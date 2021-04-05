@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
+import { StoreService } from 'src/app/services/store/store.service';
 import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 
 @Component({
@@ -12,25 +13,30 @@ export class StorePage implements OnInit {
   private store;
 
   constructor(private router           : Router,
+              private storeService     : StoreService,
               private popoverController: PopoverController,) {
-    this.store = this.getStore();
+    // this.store = this.getStore();
   }
 
   ngOnInit() {    
     // this.id = this.route.snapshot.paramMap.get('id');
     // console.log(this.id);
+    this.store = this.getStore();
   }
 
   ionViewWillEnter(){
     // this.store = this.getStore();//this.id);
   }
 
-  private getStore() {
-    let store;
+  private async getStore() {
+    try {
+      this.store = await this.storeService.findByUser();
+      console.log(this.store);
+    } catch (error) {
+      console.error(error);
+      console.log("Não foi possível carregar o feed principal");
 
-    //TODO: get store from DB (1)
-    if(!store){
-      store = {
+      this.store = {
         image: {src: 'assets/imgs/loja.jpg', name: 'cover.jpg'},
         categories: [{name: 'Alimentos', code: '1'},
           {name: 'Variados' , code: '2'}],
@@ -64,10 +70,7 @@ export class StorePage implements OnInit {
             placeID      : ''
           }
       };
-    }
-    /////////////////////////////////////////////////////////END (1)
-
-    return store;
+    }    
   }  
 
   private editItem(name, pageTitle, item = undefined) {

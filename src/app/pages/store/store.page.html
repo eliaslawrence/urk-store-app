@@ -19,7 +19,8 @@
 
 <ion-content>
   <ion-card class="crop-image-container"  (click)="addPhoto()">
-    <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" />
+    <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" *ngIf="store && store.image"/>
+    <img src="assets/imgs/loja.jpg" *ngIf="!store || !store.image"/>
     <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->
     <!-- <img [src]="storeProvider.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/sm.jpg'"/> -->
     <div class="card-title">{{store ? store.name : 'Loja'}}</div>

@@ -15,6 +15,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 //START: Provider
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { TokenInterceptorService } from './services/token-interceptor/token-interceptor.service';
 //END: Provider
 
 @NgModule({
@@ -30,6 +31,12 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
   providers: [
     ScreenOrientation,
     SplashScreen,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
+    TokenInterceptorService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

@@ -18,7 +18,6 @@ ionic cordova plugin add cordova-plugin-file-transfer
 npm install @ionic-native/file-transfer
 
 //Storage
-ionic cordova plugin add cordova-sqlite-storage
 npm install --save @ionic/storage-angular
 
 //Splash Screen
