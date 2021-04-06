@@ -19,7 +19,8 @@
 
 <ion-content>
   <ion-card class="crop-image-container"  (click)="addPhoto()">
-    <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" />
+    <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" *ngIf="store && store.image"/>
+    <img src="assets/imgs/loja.jpg" *ngIf="!store || !store.image"/>
     <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->
     <!-- <img [src]="storeProvider.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/sm.jpg'"/> -->
     <div class="card-title">{{store ? store.name : 'Loja'}}</div>
@@ -50,13 +51,13 @@
       </ion-label>      
     </ion-item-divider>
     <span *ngIf="store">
-      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(i)" lines="full">
+      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(telephone)" lines="full">
         <ion-label>
-          <h2>{{telephone}}</h2>
+          <h2>{{ telephone.number }}</h2>
         </ion-label>        
       </ion-item>
     </span>    
-    <ion-item (click)="editTelephone(-1)" lines="none">
+    <ion-item (click)="editTelephone()" lines="none">
       <ion-label>
         <p>Adicionar telefone</p>
       </ion-label>      

@@ -27,4 +27,25 @@
 //     text-decoration: none;
 //   }
 
-  
+.signup-button{
+  // position: fixed;
+  // bottom: 5%;
+  left: 0%;
+  text-align: center;
+  width: 100%;
+  // position: absolute;
+  // height: 100%;
+  margin-top: 15px;
+
+  button{
+    color: var(--ion-color-primary);
+    text-transform: initial;
+  }
+}
+
+ion-footer{
+  text-align: center;
+  // padding: 15px;
+  // position: fixed;
+  // bottom: 5%;
+}
