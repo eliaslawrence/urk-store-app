@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { AddressService } from 'src/app/services/address/address.service';
 
 @Component({
   selector: 'app-edit-address',
@@ -24,12 +25,11 @@ export class EditAddressPage implements OnInit {
   private address;
   private storeId: string;
 
-  constructor(private route         : ActivatedRoute,
-              private router        : Router,
-              public navCtrl        : NavController, 
-              // private addressService: AddressService,
-              // private storeService  : StoreService,
-              private formBuilder   : FormBuilder) { 
+  constructor(private route          : ActivatedRoute,
+              private router         : Router,
+              public navCtrl         : NavController, 
+              private addressService : AddressService,
+              private formBuilder    : FormBuilder) { 
 
   }
 
@@ -103,29 +103,30 @@ export class EditAddressPage implements OnInit {
 
   private setItem(value){    
     if(this.newItem){
-      this.create(value);
+      this.add(value);
     } else {
       this.save(value);
     }   
   }
 
-  private create(newName){  
-    
-    // this.storeService.addConducts(this.storeId, namesArray).then(() => {   
+  private async add(newVariableJSON){    
+    try {
+      await this.addressService.create(this.storeId, newVariableJSON);
       this.navCtrl.pop();
-    // }, err => {
-      // console.log(err);
-      // console.log("Não foi possível carregar o feed principal");
-    // });    
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
   }
 
-  private save(newName){    
-    // this.storeService.updateName(this.address['id'], newName).then(() => {   
+  private async save(variableJSON){    
+    try {
+      await this.addressService.updateAttribute(this.address.id, variableJSON);
       this.navCtrl.pop();
-    // }, err => {
-      // console.log(err);
-      // console.log("Não foi possível carregar o feed principal");
-    // });    
-  } 
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
+  }
 
 }

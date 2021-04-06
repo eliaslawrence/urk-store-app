@@ -27,6 +27,8 @@ export class HomePage implements OnInit {
 
     this.menuCtrl.enable(false);
 
+    this.authService.peekProfile();
+
     if(this.platform.is('android') || this.platform.is('iphone')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
@@ -51,6 +53,7 @@ export class HomePage implements OnInit {
     try {
       let res = await this.authService.signin(this.user);
       console.log(res);
+      this.authService.pokeProfile(res.user);
       this.navCtrl.navigateRoot('store');
     } catch (error) {
       console.log(error); 
@@ -65,4 +68,8 @@ export class HomePage implements OnInit {
     // });     
   }
 
+  signup(){
+    this.navCtrl.navigateForward('/signup');
+  }
+  
 }

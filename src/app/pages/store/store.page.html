@@ -51,13 +51,13 @@
       </ion-label>      
     </ion-item-divider>
     <span *ngIf="store">
-      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(i)" lines="full">
+      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(telephone)" lines="full">
         <ion-label>
-          <h2>{{telephone}}</h2>
+          <h2>{{ telephone.number }}</h2>
         </ion-label>        
       </ion-item>
     </span>    
-    <ion-item (click)="editTelephone(-1)" lines="none">
+    <ion-item (click)="editTelephone()" lines="none">
       <ion-label>
         <p>Adicionar telefone</p>
       </ion-label>      

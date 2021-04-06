@@ -10,7 +10,7 @@ import { AddPhotoComponent } from './components/add-photo/add-photo.component';
   styleUrls: ['./store.page.scss'],
 })
 export class StorePage implements OnInit {
-  private store;
+  private store:any = {};
 
   constructor(private router           : Router,
               private storeService     : StoreService,
@@ -21,11 +21,11 @@ export class StorePage implements OnInit {
   ngOnInit() {    
     // this.id = this.route.snapshot.paramMap.get('id');
     // console.log(this.id);
-    this.store = this.getStore();
+    // this.getStore();
   }
 
   ionViewWillEnter(){
-    // this.store = this.getStore();//this.id);
+    this.getStore();//this.id);
   }
 
   private async getStore() {
@@ -99,11 +99,10 @@ export class StorePage implements OnInit {
     this.router.navigate(['store/edit-address'], navigationExtras);
   }
 
-  editTelephone(index) {    
+  editTelephone(telephone) {    
     let navigationExtras: NavigationExtras = {
       state : {
-        index     : index,
-        list      : this.store.telephones,
+        item      : telephone,
         name      : 'telephones',
         pageTitle : 'Telefone',
         storeId   : this.store.id
