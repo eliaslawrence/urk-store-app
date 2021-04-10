@@ -15,7 +15,9 @@
 
         img{
             height: 100%;
+            width: 100px;
             border-radius: 15px;
+            object-fit: cover;
         }
     }
 }
@@ -42,6 +44,12 @@ ion-grid {
 ion-card{
     margin: 0;
     border-radius: 0;
-    max-height: 300px;
+    height: 300px;
     width: 100% !important;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
 }

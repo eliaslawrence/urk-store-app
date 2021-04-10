@@ -22,12 +22,9 @@ export class HomePage implements OnInit {
               private platform         : Platform,
               private menuCtrl         : MenuController,
               private navCtrl          : NavController,
-              private authService      : AuthenticateService,
-              private storage          : Storage) {  
+              private authService      : AuthenticateService) {  
 
     this.menuCtrl.enable(false);
-
-    this.authService.peekProfile();
 
     if(this.platform.is('android') || this.platform.is('iphone')) {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
@@ -53,19 +50,10 @@ export class HomePage implements OnInit {
     try {
       let res = await this.authService.signin(this.user);
       console.log(res);
-      this.authService.pokeProfile(res.user);
       this.navCtrl.navigateRoot('store');
     } catch (error) {
       console.log(error); 
     }
-    // this.authService.signin(this.user).then(res => {        
-    //   console.log(res);
-    //   this.navCtrl.navigateRoot('store');
-    //   // this.events.publish('user:logged');          
-    // }, err => {
-    //   console.log(err); 
-    //   // this.navCtrl.navigateRoot('patients');
-    // });     
   }
 
   signup(){

@@ -26,11 +26,11 @@
         Indisponível
       </div>
     </ion-segment-button>
-    <ion-segment-button value="soldOut">
+    <!-- <ion-segment-button value="soldOut">
       <div class="text-inside-button">
         Esgotado
       </div>
-    </ion-segment-button>
+    </ion-segment-button> -->
   </ion-segment>
 </ion-header>
 
@@ -43,9 +43,13 @@
   <div [ngSwitch]="status">
     <ion-list *ngSwitchCase="'available'">
       <div *ngFor="let item of products; let i = index">
-        <ion-item lines="full" *ngIf="item.available" (click)="itemTapped($event, item, i)">
-          <ion-thumbnail slot="start">
-            <img src="{{item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">            
+        <ion-item lines="full" *ngIf="item.available" (click)="itemTapped(item.id)">
+          <ion-thumbnail slot="start" *ngIf="item.images && item.images[0]">
+            <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/sm.jpg'"/>
+            <!-- <img src="{{item.imagesList && item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">             -->
+          </ion-thumbnail>
+          <ion-thumbnail slot="start" *ngIf="!item.images || !item.images[0]">
+            <img src="assets/imgs/sm.jpg"/>
           </ion-thumbnail>
 
           <ion-label>
@@ -54,7 +58,7 @@
             </p>
 
             <div class="line-break">
-              <h2>{{item.productName}}</h2>
+              <h2>{{item.name}}</h2>
             </div>
 
             <div class="same-line">
@@ -68,29 +72,31 @@
 
     <ion-list *ngSwitchCase="'unavailable'">
       <div *ngFor="let item of products; let i = index">
-        <ion-item lines="full" *ngIf="!item.available" (click)="itemTapped($event, item, i)">
+        <ion-item lines="full" *ngIf="!item.available" (click)="itemTapped(item.id)">
           <ion-thumbnail slot="start">
-            <img src="{{item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">            
+            <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/sm.jpg'"/>
+            <!-- <img src="{{item.imagesList &&item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">             -->
           </ion-thumbnail>
 
           <ion-label>
             <p>
-            {{item.code}}
-          </p>
+              {{item.code}}
+            </p>
 
-          <div class="line-break">
-            <h2>{{item.productName}}</h2>
-          </div>
+            <div class="line-break">
+              <h2>{{item.name}}</h2>
+            </div>
 
-          <div class="same-line">
-            <h2>R$ {{item.price}}</h2> <p> x {{item.qty}}{{item.unity}}</p>
-          </div>
-          </ion-label>          
+            <div class="same-line">
+              <h2>R$ {{item.price}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
+            </div>
+          </ion-label>
+                   
         </ion-item>
       </div>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'soldOut'">
+    <!-- <ion-list *ngSwitchCase="'soldOut'">
       <div *ngFor="let item of products; let i = index">
         <ion-item lines="full" *ngIf="item.qty <= 0" (click)="itemTapped(item.code)">
           <ion-thumbnail slot="start">
@@ -112,6 +118,6 @@
           </ion-label>          
         </ion-item>
       </div>
-    </ion-list>
+    </ion-list> -->
   </div>
 </ion-content>

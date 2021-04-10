@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
+import { ProductService } from 'src/app/services/product/product.service';
+import { ProductImageService } from 'src/app/services/product/productImage/product-image.service';
 import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 
 @Component({
@@ -12,6 +14,7 @@ export class EditPhotosPage implements OnInit {
 
   private product          : any;
   private imgSelectedIndex : number = -1;
+  url = 'http://192.168.15.5:1337/image/findById/';
 
   constructor(private router : Router,
               private route  : ActivatedRoute,
@@ -19,7 +22,9 @@ export class EditPhotosPage implements OnInit {
               // private requestProvider: RequestProvider,
               // private loadingCtrl: LoadingController,
               // private toastCtrl: ToastController,
-              public popoverController: PopoverController
+              private productService      : ProductService,
+              private productImageService : ProductImageService,
+              public popoverController    : PopoverController
               ) { }
 
   ngOnInit() {
@@ -31,6 +36,16 @@ export class EditPhotosPage implements OnInit {
 
   }
 
+  async getProduct(id: string){      
+    try {
+      this.product = await this.productService.findById(id); 
+      console.log(this.product);  
+    } catch (error) {
+      console.error(error);
+      console.log("Não foi possível carregar o feed principal");
+    }
+  }
+
   async addPhoto(){
     const popover = await this.popoverController.create({
       component: AddPhotoComponent,
@@ -38,6 +53,10 @@ export class EditPhotosPage implements OnInit {
       showBackdrop: true,
       cssClass: 'custom-popover'
     });    
+
+    popover.onDidDismiss().then(() => {
+      return this.getProduct(this.product.id);     
+    });
 
     return await popover.present();    
   }
@@ -53,6 +72,16 @@ export class EditPhotosPage implements OnInit {
       // this.presentToast(this.product.images[index].src);
     }else{
       this.imgSelectedIndex = -1;
+    }
+  }
+
+  private async deleteImage(index){
+    try {
+      await this.productImageService.remove({productImage: this.product.images[index]});
+      this.imgSelectedIndex = -1;
+      await this.getProduct(this.product.id); 
+    } catch (error) {
+      console.error(error);
     }
   }
 }

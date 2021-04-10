@@ -11,20 +11,20 @@ export class TelephoneService {
   constructor(private requestService: RequestService) { }
 
   // CREATE
-  create(storeID, newTelephone) : Promise<any>{
+  async create(storeID, newTelephone) : Promise<any>{
     let uri = BASE_URI + 'create/' + storeID;
-    return this.requestService.post(uri, {newTelephone: newTelephone}, "Criando...");
+    return await this.requestService.post(uri, {newTelephone: newTelephone}, "Criando...");
   }
 
   // DELETE
-  delete(telephoneId) : Promise<any>{
+  async delete(telephoneId) : Promise<any>{
     let uri = BASE_URI + 'delete/' + telephoneId;
-    return this.requestService.post(uri, {}, "Removendo...");
+    return await this.requestService.post(uri, {}, "Removendo...");
   }
 
   // Update
-  updateAttribute(storeID, attributeJSON) : Promise<any>{
+  async updateAttribute(storeID, attributeJSON) : Promise<any>{
     let uri = BASE_URI + 'updateAttribute/' + storeID;
-    return this.requestService.put(uri, attributeJSON, "Atualizando...");
+    return await this.requestService.put(uri, attributeJSON, "Atualizando...");
   }
 }

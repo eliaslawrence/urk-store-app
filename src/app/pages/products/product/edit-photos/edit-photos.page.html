@@ -23,7 +23,8 @@
 
 <ion-content>
   <ion-card (click)="presentActionSheet()" *ngIf="product.images && imgSelectedIndex != -1">
-    <img src="{{product.images[imgSelectedIndex].src}}"/>
+    <!-- <img src="{{product.images[imgSelectedIndex].src}}"/> -->
+    <img [src]="url + product.images[imgSelectedIndex].image" onerror="this.src='assets/imgs/sm.jpg'"/>
   </ion-card>
 
   <ion-grid *ngIf="!product.images || imgSelectedIndex == -1">
@@ -46,8 +47,9 @@
   </ion-grid>
 
   <div class="photoslide" *ngIf="product.images && product.images.length > 0">
-    <div *ngFor="let image of product.images; let i = index">      
-      <img src="{{image.src}}" (click)="imageSelected(i)" [ngClass]="{'img-selected': image.selected}">
+    <div *ngFor="let image of product.images; let i = index">  
+      <img [src]="url + image.image" (click)="imageSelected(i)" [ngClass]="{'img-selected': image.selected}"/>    
+      <!-- <img src="{{image.src}}" (click)="imageSelected(i)" [ngClass]="{'img-selected': image.selected}"> -->
       <ion-buttons slot="end" class="toolbar-end-margin" style="position: absolute; top: 0; right: 0; margin: 0;" *ngIf="image.selected">
       </ion-buttons>
     </div>

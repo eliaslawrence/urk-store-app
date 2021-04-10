@@ -4,6 +4,9 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { environment } from 'src/environments/environment';
+import { Storage } from '@ionic/storage-angular';
+
+const TOKEN_KEY = 'userToken';
 
 @Component({
   selector: 'app-add-photo',
@@ -20,6 +23,7 @@ export class AddPhotoComponent implements OnInit {
               private file     : File,
               private transfer : FileTransfer,
               private navParams: NavParams,
+              private storage  : Storage,
               private camera   : Camera) {
     
     this.product = this.navParams.get('product');
@@ -57,8 +61,10 @@ export class AddPhotoComponent implements OnInit {
       console.log('imageData');
       console.log(imageData);
       let fileName = this.createFileName();
-      this.upload(imageData, fileName);
-      this.product.images.push({src: this.win.Ionic.WebView.convertFileSrc(imageData), name: fileName}); 
+      // this.product.images.push({src: this.win.Ionic.WebView.convertFileSrc(imageData), name: fileName}); 
+      this.upload(imageData, fileName).then(() => {
+        this.close();
+      }); 
 
       // if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
 
@@ -81,7 +87,7 @@ export class AddPhotoComponent implements OnInit {
       // loading.dismiss();
     });
 
-    this.close();
+    // this.close();
   }
 
   // Copy the image to a local folder
@@ -123,30 +129,37 @@ export class AddPhotoComponent implements OnInit {
     return newFileName;
   }
   
-  private upload(fileSrc, fileName) {   
+  private upload(fileSrc, fileName) : Promise<any> {   
 
-    var options = {
-      fileKey: "image",
-      fileName: fileName,
-      chunkedMode: false,
-      mimeType: "multipart/form-data",
-      // params : {'fileName': this.lastImage.name}
-    };
-   
-    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-    // this.loading = this.loadingCtrl.create({
-    //   content: 'Uploading...',
-    // });
-    // this.loading.present();
-   
-    // Use the FileTransfer to upload the image
-    fileTransfer.upload(fileSrc, environment.urlServer + 'test/upload', options).then(data => {
-      console.log(data);
-      // this.loading.dismissAll()
-    }, err => {
-      console.log(err);
-      // this.loading.dismissAll()
+    return this.storage.get(TOKEN_KEY).then((token) => {
+      var options = {
+        fileKey: "image",
+        fileName: fileName,
+        chunkedMode: false,
+        mimeType: "multipart/form-data",
+        // params : {'productId': this.product.id},
+        headers: {
+          Authorization: `bearer ${token}`
+        }
+        // params : {'fileName': this.lastImage.name}
+      };
+    
+      const fileTransfer: FileTransferObject = this.transfer.create();
+    
+      // this.loading = this.loadingCtrl.create({
+      //   content: 'Uploading...',
+      // });
+      // this.loading.present();
+    
+      // Use the FileTransfer to upload the image
+      fileTransfer.upload(fileSrc, environment.urlServer + 'product/addImage/' + this.product.id, options).then(data => {
+        console.log(data);
+        return data;
+        // this.loading.dismissAll()
+      }, err => {
+        console.log(err);
+        // this.loading.dismissAll()
+      });
     });
   }
 

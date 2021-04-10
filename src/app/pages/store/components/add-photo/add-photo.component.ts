@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, PopoverController } from '@ionic/angular';
+import { NavController, NavParams, PopoverController } from '@ionic/angular';
 import { Camera } from '@ionic-native/camera/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { environment } from 'src/environments/environment';
+import { Storage } from '@ionic/storage-angular';
+
+const TOKEN_KEY = 'userToken';
 
 @Component({
   selector: 'app-add-photo',
@@ -19,6 +22,8 @@ export class AddPhotoComponent implements OnInit {
               private file     : File,
               private transfer : FileTransfer,
               private navParams: NavParams,
+              private navCtrl  : NavController,
+              private storage  : Storage,
               private camera   : Camera) {
     
     this.store = this.navParams.get('store');
@@ -54,8 +59,10 @@ export class AddPhotoComponent implements OnInit {
       console.log('imageData');
       console.log(imageData);
       let fileName = this.createFileName();
-      this.store.image = {src: this.win.Ionic.WebView.convertFileSrc(imageData), name: fileName}; 
-      this.upload(imageData, fileName);      
+      // this.store.image = {src: this.win.Ionic.WebView.convertFileSrc(imageData), name: fileName}; 
+      this.upload(imageData, fileName).then(() => {
+        this.close();
+      });    
       
       // loading.dismiss();
     }, (err) => {
@@ -64,7 +71,7 @@ export class AddPhotoComponent implements OnInit {
       // loading.dismiss();
     });
 
-    this.close();
+    // this.close();
   }
 
   // Create a new name for the image
@@ -75,31 +82,38 @@ export class AddPhotoComponent implements OnInit {
     return newFileName;
   }
   
-  private upload(fileSrc, fileName) {   
+  private upload(fileSrc, fileName) : Promise<any>{   
 
-    var options = {
-      fileKey: "image",
-      fileName: fileName,
-      chunkedMode: false,
-      mimeType: "multipart/form-data",
-    };
-   
-    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-    // this.loading = this.loadingCtrl.create({
-    //   content: 'Uploading...',
-    // });
-    // this.loading.present();
-   
-    // Use the FileTransfer to upload the image
-    fileTransfer.upload(fileSrc, environment.urlServer + 'test/upload', options).then(data => {
-      console.log(data);
-      console.log(JSON.parse(data.response));
-      // this.loading.dismissAll()
-    }, err => {
-      console.log(err);
-      // this.loading.dismissAll()
+    return this.storage.get(TOKEN_KEY).then((token) => {
+      var options = {
+        fileKey: "image",
+        fileName: fileName,
+        chunkedMode: false,
+        mimeType: "multipart/form-data",
+        headers: {
+          Authorization: `bearer ${token}`
+        }
+      };
+
+      const fileTransfer: FileTransferObject = this.transfer.create();
+
+      // this.loading = this.loadingCtrl.create({
+      //   content: 'Uploading...',
+      // });
+      // this.loading.present();
+      // Use the FileTransfer to upload the image
+      fileTransfer.upload(fileSrc, environment.urlServer + 'store/updateImage', options).then(data => {
+        console.log(data);
+        console.log(JSON.parse(data.response));
+
+        return data;
+        // this.navCtrl.navigateRoot('store');
+        // this.loading.dismissAll()
+      }, err => {
+        console.log(err);
+      });
     });
+    
   }
 
   close() {

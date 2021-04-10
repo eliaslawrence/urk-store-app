@@ -27,13 +27,14 @@
   <ion-item-divider color="light" class="border-none">
     Fotos
   </ion-item-divider>
-  <div class="photoslide" *ngIf="product.images && product.images.length > 0" (click)="editPhotos()">
+  <div class="photoslide" *ngIf="product && product.images && product.images.length > 0" (click)="editPhotos()">
     <div *ngFor="let image of product.images; let i = index">
-      <img src="{{image.src}}">
+      <!-- <img src="{{image.src}}"> -->
+      <img [src]="url + image.image" onerror="this.src='assets/imgs/sm.jpg'"/>
     </div>
   </div>
 
-  <ion-item lines="none" *ngIf="!product.images || product.images.length == 0" (click)="editPhotos()">
+  <ion-item lines="none" *ngIf="!product || !product.images || product.images.length == 0" (click)="editPhotos()">
     <ion-label>
       <p>Adicionar fotos</p>
     </ion-label>    
@@ -94,7 +95,7 @@
     </ion-item> -->
     <ion-item lines="none">
       <ion-label>Disponível para venda</ion-label>
-      <ion-toggle [(ngModel)]="product.salesAvailable" color="primary" checked="false" (ionChange)="availableToggled(product.salesAvailable)"></ion-toggle>
+      <ion-toggle [(ngModel)]="product.available" color="primary" checked="false" (ionChange)="availableToggled(product.available)"></ion-toggle>
     </ion-item>    
 
     <!-- <ion-item-divider color="light" class="border-none">

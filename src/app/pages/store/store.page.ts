@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { PopoverController } from '@ionic/angular';
+import { AlertController, NavController, PopoverController } from '@ionic/angular';
 import { StoreService } from 'src/app/services/store/store.service';
 import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 
@@ -12,9 +12,13 @@ import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 export class StorePage implements OnInit {
   private store:any = {};
 
-  constructor(private router           : Router,
-              private storeService     : StoreService,
-              private popoverController: PopoverController,) {
+  url = "http://192.168.15.5:1337/image/findById/";
+  imageURL;
+
+  constructor(private router            : Router,
+              private storeService      : StoreService,
+              private popoverController : PopoverController,
+              private navCtrl           : NavController) {
     // this.store = this.getStore();
   }
 
@@ -30,7 +34,7 @@ export class StorePage implements OnInit {
 
   private async getStore() {
     try {
-      this.store = await this.storeService.findByUser();
+      this.store = await this.storeService.findByUser();      
       console.log(this.store);
     } catch (error) {
       console.error(error);
@@ -131,7 +135,14 @@ export class StorePage implements OnInit {
       componentProps: {store: this.store},
       showBackdrop: true,
       cssClass: 'custom-popover'
-    });    
+    });   
+    
+    popover.onDidDismiss().then(() => {
+      return this.getStore();  
+      // return this.getStore().then(() => {
+        // this.imageURL = this.url + this.store.coverImage + '?' + new Date().getTime();
+      // });      
+    });
 
     return await popover.present();    
   }

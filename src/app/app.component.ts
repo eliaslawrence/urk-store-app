@@ -3,7 +3,9 @@ import { NavController } from '@ionic/angular';
 import { Storage } from "@ionic/storage-angular";
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { AuthenticateService } from './services/authenticate/authenticate.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { StoreService } from './services/store/store.service';
+import { UserService } from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -17,36 +19,45 @@ export class AppComponent {
     { title: 'Produtos', url: '/products', icon: 'grid' },
   ];
 
-  user$ : Observable<any | null>;
+  
+  private store:any;
+  private storeChangedSubscription: Subscription;
 
-  constructor(private storage : Storage,
-              private splashScreen: SplashScreen,
-              private auth      : AuthenticateService,
-              private navCtrl : NavController) {           
+  private user:any;
+  private authChangedSubscription: Subscription;
+  private userChangedSubscription: Subscription;
+
+  constructor(private storage      : Storage,
+              private splashScreen : SplashScreen,
+              private authService  : AuthenticateService,
+              private userService  : UserService,
+              private storeService : StoreService,
+              private navCtrl      : NavController) {           
     
-    this.user$ = auth.watchProfile();
+    this.storeChangedSubscription = this.storeService.storeChanged$.subscribe((store)=>{
+      this.store = store;
+    });
+
+    this.authChangedSubscription = this.authService.userChanged$.subscribe((user)=>{
+      this.user = user;
+    })
+
+    this.userChangedSubscription = this.userService.userChanged$.subscribe((user)=>{
+      this.user = user;
+    })
 
     this.storage.create().then(() => {
       this.storage.get('userToken').then((userToken) => {
         if(userToken){
           this.splashScreen.hide();
           console.log(userToken);
-          this.navCtrl.navigateRoot('store');        
+          this.userService.getLoggedUser().then((user)=>{
+            console.log(user);
+            this.navCtrl.navigateRoot('store');    
+          });              
         }
       });
-    });    
-    
-    // await this.storage.create();  
-
-    // try {
-    //   let userToken = await this.storage.get('userToken');
-    //   if(userToken){
-    //     this.navCtrl.navigateRoot('store');
-    //       console.log(userToken);
-    //     }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    });  
   }
 
   logout(){    

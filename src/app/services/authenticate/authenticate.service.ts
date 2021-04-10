@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RequestService } from '../request/request.service';
 import { Storage } from "@ionic/storage-angular";
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 const BASE_URI = 'auth/';
 
@@ -9,23 +9,13 @@ const BASE_URI = 'auth/';
   providedIn: 'root'
 })
 export class AuthenticateService {
-  user$ = new BehaviorSubject<any | null>(null);
+
+  private user: any = {};
+  private userSubject$ = new BehaviorSubject<any>(this.user);
+  userChanged$ = this.userSubject$.asObservable();
 
   constructor(private requestService: RequestService,
-              private storage: Storage
-              ) {
-  }
-
-  watchProfile(): Observable<any> { 
-    return this.user$; 
-  }
-
-  peekProfile(): any | null { 
-    return this.user$.value; 
-  }
-
-  pokeProfile(user: any): void { 
-    this.user$.next(user); 
+              private storage: Storage) {
   }
 
   //login
@@ -40,17 +30,21 @@ export class AuthenticateService {
     return await this.post(uri, newUser, "Criando cadastro...");
   }  
 
-  private async post(url, body, message) {   
-    let result;
-
+  private async post(url, body, message) {  
     try {
-      result = await this.requestService.post(url, body, message);
+      var result = await this.requestService.post(url, body, message);
       this.storage.set('userToken', result.token);
+      this.setObservable(result.user);
     } catch (error) {
       throw(error);
     }     
 
     return result;
   }  
+
+  private setObservable(object){
+    this.user = object;
+    this.userSubject$.next(this.user);
+  }
  
 }
