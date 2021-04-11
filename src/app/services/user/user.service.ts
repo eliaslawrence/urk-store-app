@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RequestService } from '../request/request.service';
-import { Storage } from "@ionic/storage-angular";
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 const BASE_URI = 'user/';
 

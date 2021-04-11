@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, PopoverController } from '@ionic/angular';
+import { NavParams, Platform, PopoverController } from '@ionic/angular';
 import { Camera } from '@ionic-native/camera/ngx';
 import { File } from "@ionic-native/file/ngx";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
@@ -15,19 +15,15 @@ const TOKEN_KEY = 'userToken';
 })
 export class AddPhotoComponent implements OnInit {
 
-  private store;
-  private win: any = window;    
+  private data;  
 
   constructor(private popCtrl  : PopoverController,
+              private platform : Platform,
               private file     : File,
               private transfer : FileTransfer,
               private navParams: NavParams,
-              private navCtrl  : NavController,
               private storage  : Storage,
               private camera   : Camera) {
-    
-    this.store = this.navParams.get('store');
-    this.file.createDir(this.file.dataDirectory, 'store', true).then(_ => console.log('Created!!')).catch(err => console.log('Erro: ' + err));
   }
 
   ngOnInit() {}
@@ -40,7 +36,7 @@ export class AddPhotoComponent implements OnInit {
     this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
   }
 
-  private takePicture(sourceType) {
+  private async takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
       quality: 100,
@@ -49,29 +45,17 @@ export class AddPhotoComponent implements OnInit {
       correctOrientation: true
     };
 
-    // let loading;
-    // loading =  this.loadingCtrl.create({
-    //   content: 'Carregando imagem...'
-    // });
-    // loading.present();
-
-    this.camera.getPicture(options).then((imageData) => {
+    try {
+      let imageData = await this.camera.getPicture(options);
       console.log('imageData');
       console.log(imageData);
       let fileName = this.createFileName();
-      // this.store.image = {src: this.win.Ionic.WebView.convertFileSrc(imageData), name: fileName}; 
-      this.upload(imageData, fileName).then(() => {
-        this.close();
-      });    
-      
-      // loading.dismiss();
-    }, (err) => {
-      console.log(err);
-      // this.presentToast('Error while selecting image.');
-      // loading.dismiss();
-    });
-
-    // this.close();
+        
+      await this.upload(imageData, fileName);
+      this.close();
+    } catch (error) {
+      console.log(error);
+    }    
   }
 
   // Create a new name for the image
@@ -82,9 +66,11 @@ export class AddPhotoComponent implements OnInit {
     return newFileName;
   }
   
-  private upload(fileSrc, fileName) : Promise<any>{   
+  private async upload(fileSrc, fileName){   
 
-    return this.storage.get(TOKEN_KEY).then((token) => {
+    try {
+      let token = await this.storage.get(TOKEN_KEY);
+    
       var options = {
         fileKey: "image",
         fileName: fileName,
@@ -97,28 +83,19 @@ export class AddPhotoComponent implements OnInit {
 
       const fileTransfer: FileTransferObject = this.transfer.create();
 
-      // this.loading = this.loadingCtrl.create({
-      //   content: 'Uploading...',
-      // });
-      // this.loading.present();
-      // Use the FileTransfer to upload the image
-      fileTransfer.upload(fileSrc, environment.urlServer + 'store/updateImage', options).then(data => {
-        console.log(data);
-        console.log(JSON.parse(data.response));
-
-        return data;
-        // this.navCtrl.navigateRoot('store');
-        // this.loading.dismissAll()
-      }, err => {
-        console.log(err);
-      });
-    });
-    
+      this.data = await fileTransfer.upload(fileSrc, environment.urlServer + 'image/upload', options);
+      console.log(this.data);
+      this.data = JSON.parse(this.data.response)
+      console.log(this.data);          
+    } catch (error) {
+      console.log(error);
+    }       
   }
 
   close() {
     console.log("close");
-    this.popCtrl.dismiss();
+    console.log(this.data);
+    this.popCtrl.dismiss(this.data);
   }
 
 }

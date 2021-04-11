@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController, NavController, PopoverController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { AddPhotoComponent } from 'src/app/components/add-photo/add-photo/add-photo.component';
 import { StoreService } from 'src/app/services/store/store.service';
-import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 
 @Component({
   selector: 'app-store',
@@ -12,14 +13,14 @@ import { AddPhotoComponent } from './components/add-photo/add-photo.component';
 export class StorePage implements OnInit {
   private store:any = {};
 
-  url = "http://192.168.15.5:1337/image/findById/";
+  url1 = "http://192.168.15.5:1337/image/findById/";
+  url  = "192.168.15.5:1337/uploads/2a96f0e5-9a27-475e-a1ba-64c8771594b1.jpg";
   imageURL;
 
   constructor(private router            : Router,
               private storeService      : StoreService,
               private popoverController : PopoverController,
               private navCtrl           : NavController) {
-    // this.store = this.getStore();
   }
 
   ngOnInit() {    
@@ -37,7 +38,7 @@ export class StorePage implements OnInit {
       this.store = await this.storeService.findByUser();      
       console.log(this.store);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       console.log("Não foi possível carregar o feed principal");
 
       this.store = {
@@ -137,14 +138,16 @@ export class StorePage implements OnInit {
       cssClass: 'custom-popover'
     });   
     
-    popover.onDidDismiss().then(() => {
-      return this.getStore();  
-      // return this.getStore().then(() => {
-        // this.imageURL = this.url + this.store.coverImage + '?' + new Date().getTime();
-      // });      
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      this.storeService.updateImage({file:data.data}).then(()=>{
+        this.getStore();
+      }).catch((error)=>{
+        console.log(error);
+      });    
     });
 
-    return await popover.present();    
+    await popover.present();
   }
 
 }

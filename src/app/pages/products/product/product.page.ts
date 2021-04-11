@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, PopoverController } from '@ionic/angular';
+import { AddPhotoComponent } from 'src/app/components/add-photo/add-photo/add-photo.component';
 import { ProductService } from 'src/app/services/product/product.service';
 
 @Component({
@@ -13,12 +14,11 @@ export class ProductPage implements OnInit {
   private id     : string;
   private product: any = {images: [], code: '', name: '', description: '', cost: ''};
 
-  url = 'http://192.168.15.5:1337/image/findById/';
-
   constructor(private route         : ActivatedRoute,
               private router        : Router,
               private productService: ProductService,
               private navCtrl       : NavController,
+              private popoverController : PopoverController,
               public  menuCtrl      : MenuController) {    
     this.menuCtrl.enable(false);
   }
@@ -109,6 +109,30 @@ export class ProductPage implements OnInit {
     } catch (err) {
       console.log(err);
     }    
+  }
+
+  async addPhoto(){
+    const popover = await this.popoverController.create({
+      component: AddPhotoComponent,
+      componentProps: {product: this.product},
+      showBackdrop: true,
+      cssClass: 'custom-popover'
+    });     
+
+    await popover.present();
+
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      this.productService.updateCoverImage(this.id, {file:data.data}).then(()=>{
+        this.getProduct(this.id);
+      }).catch((error)=>{
+        console.log(error);
+      });      
+    });
+
+    // const { role } = await popover.onDidDismiss();
+    // console.log('onDidDismiss resolved with role', role); 
+    // await this.getProduct(this.id);
   }
 
 }

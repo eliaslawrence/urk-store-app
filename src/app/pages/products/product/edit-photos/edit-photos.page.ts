@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { ProductService } from 'src/app/services/product/product.service';
 import { ProductImageService } from 'src/app/services/product/productImage/product-image.service';
-import { AddPhotoComponent } from './components/add-photo/add-photo.component';
+import { AddPhotoComponent } from 'src/app/components/add-photo/add-photo/add-photo.component';
 
 @Component({
   selector: 'app-edit-photos',
@@ -54,8 +54,13 @@ export class EditPhotosPage implements OnInit {
       cssClass: 'custom-popover'
     });    
 
-    popover.onDidDismiss().then(() => {
-      return this.getProduct(this.product.id);     
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      this.productService.addImage(this.product.id, {file:data.data}).then(()=>{
+        this.getProduct(this.product.id);
+      }).catch((error)=>{
+        console.log(error);
+      });    
     });
 
     return await popover.present();    
@@ -77,7 +82,7 @@ export class EditPhotosPage implements OnInit {
 
   private async deleteImage(index){
     try {
-      await this.productImageService.remove({productImage: this.product.images[index]});
+      await this.productImageService.remove({productImage: {product: this.product.id, image: this.product.images[index].id}});
       this.imgSelectedIndex = -1;
       await this.getProduct(this.product.id); 
     } catch (error) {

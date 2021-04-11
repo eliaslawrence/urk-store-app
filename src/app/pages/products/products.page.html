@@ -44,12 +44,13 @@
     <ion-list *ngSwitchCase="'available'">
       <div *ngFor="let item of products; let i = index">
         <ion-item lines="full" *ngIf="item.available" (click)="itemTapped(item.id)">
-          <ion-thumbnail slot="start" *ngIf="item.images && item.images[0]">
-            <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/sm.jpg'"/>
+          <ion-thumbnail slot="start" *ngIf="item.coverImage">
+            <img [src]="item.coverImage.url" onerror="this.src='assets/imgs/no-image.png'"/>
+            <!-- <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/no-image.png'"/> -->
             <!-- <img src="{{item.imagesList && item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">             -->
           </ion-thumbnail>
-          <ion-thumbnail slot="start" *ngIf="!item.images || !item.images[0]">
-            <img src="assets/imgs/sm.jpg"/>
+          <ion-thumbnail slot="start" *ngIf="!item.coverImage">
+            <img src="assets/imgs/no-image.png"/>
           </ion-thumbnail>
 
           <ion-label>
@@ -73,9 +74,13 @@
     <ion-list *ngSwitchCase="'unavailable'">
       <div *ngFor="let item of products; let i = index">
         <ion-item lines="full" *ngIf="!item.available" (click)="itemTapped(item.id)">
-          <ion-thumbnail slot="start">
-            <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/sm.jpg'"/>
-            <!-- <img src="{{item.imagesList &&item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">             -->
+          <ion-thumbnail slot="start" *ngIf="item.coverImage">
+            <img [src]="item.coverImage.url" onerror="this.src='assets/imgs/no-image.png'"/>
+            <!-- <img [src]="url + item.images[0].image" onerror="this.src='assets/imgs/no-image.png'"/> -->
+            <!-- <img src="{{item.imagesList && item.imagesList[0] ? item.imagesList[0].src : 'assets/imgs/sm.jpg'}}">             -->
+          </ion-thumbnail>
+          <ion-thumbnail slot="start" *ngIf="!item.coverImage">
+            <img src="assets/imgs/no-image.png"/>
           </ion-thumbnail>
 
           <ion-label>

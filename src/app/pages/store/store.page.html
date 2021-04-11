@@ -14,17 +14,24 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Minha Loja</ion-title>
+
+    <ion-buttons slot="end">      
+      <ion-button (click)="addPhoto()">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="crop-image-container"  (click)="addPhoto()">
+  <ion-card class="crop-image-container">
     <!-- <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" *ngIf="store && store.image"/>     -->    
     <!-- <img src="{{url + store.coverImage}}"/> -->
     <!-- <img [src]="imageUrl" onerror="this.src='assets/imgs/loja.jpg'"/> -->
     <!-- <img src="assets/imgs/loja.jpg" *ngIf="!store || !store.image"/> -->
-    <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->
-    <img [src]="storeService.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/sm.jpg'"/>
+    <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->    
+    <img [src]="store && store.coverImage ? store.coverImage.url : 'assets/imgs/loja.jpg'" onerror="this.src='assets/imgs/loja.jpg'"/>
+    <!-- <img [src]="storeService.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/loja.jpg'"/> -->
     <div class="card-title">{{store ? store.name : 'Loja'}}</div>
   </ion-card>
   

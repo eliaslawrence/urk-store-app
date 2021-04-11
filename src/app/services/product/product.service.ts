@@ -27,6 +27,18 @@ export class ProductService {
     return this.requestService.put(uri, attributeJSON, "Atualizando...");
   }  
 
+  async updateCoverImage(productId, file) : Promise<any>{
+    let uri = BASE_URI + 'updateCoverImage/' + productId;
+    let product = await this.requestService.post(uri, file, "Atualizando...");
+    return product;
+  }
+
+  async addImage(productId, file) : Promise<any>{
+    let uri = BASE_URI + 'addImage/' + productId;
+    let product = await this.requestService.post(uri, file, "Atualizando...");
+    return product;
+  }
+
   // DELETE
   async delete(productId) : Promise<any>{
     let uri = BASE_URI + 'delete/' + productId;
