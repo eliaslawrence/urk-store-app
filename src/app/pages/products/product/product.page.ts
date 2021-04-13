@@ -123,11 +123,15 @@ export class ProductPage implements OnInit {
 
     popover.onDidDismiss().then((data) => {
       console.log(data);
-      this.productService.updateCoverImage(this.id, {file:data.data}).then(()=>{
-        this.getProduct(this.id);
-      }).catch((error)=>{
-        console.log(error);
-      });      
+      if(data.data){
+        this.productService.updateCoverImage(this.id, {file:data.data}).then(()=>{
+          this.getProduct(this.id);
+        }).catch((error)=>{
+          console.log(error);
+        }); 
+      }           
+    }).catch((error)=>{
+      console.log(error);
     });
 
     // const { role } = await popover.onDidDismiss();

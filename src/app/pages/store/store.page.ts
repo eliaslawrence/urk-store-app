@@ -140,12 +140,16 @@ export class StorePage implements OnInit {
     
     popover.onDidDismiss().then((data) => {
       console.log(data);
-      this.storeService.updateImage({file:data.data}).then(()=>{
-        this.getStore();
-      }).catch((error)=>{
-        console.log(error);
-      });    
-    });
+      if(data.data){
+        this.storeService.updateImage({file:data.data}).then(()=>{
+          this.getStore();
+        }).catch((error)=>{
+          console.log(error);
+        }); 
+      }         
+    }).catch((error)=>{
+      console.log(error);
+    }); 
 
     await popover.present();
   }

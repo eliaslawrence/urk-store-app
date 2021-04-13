@@ -94,7 +94,6 @@ export class AddPhotoComponent implements OnInit {
 
   close() {
     console.log("close");
-    console.log(this.data);
     this.popCtrl.dismiss(this.data);
   }
 
