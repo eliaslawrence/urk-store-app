@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { AuthenticateService } from 'src/app/services/authenticate/authenticate.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class SignupPage implements OnInit {
 
   constructor(public navCtrl: NavController,
               private authService: AuthenticateService, 
+              private alertController : AlertController,
               public formBuilder: FormBuilder) { 
               
     this.signupForm = formBuilder.group({
@@ -96,13 +97,14 @@ export class SignupPage implements OnInit {
 
       if(!this.signupForm.valid){
         console.error(this.getErrorMsg());
+        this.errorAlert(this.getErrorMsg());
         // this.sys.presentToast(this.getErrorMsg());
       }else{        
         this.fillRequest();
         try {
           let res = await this.authService.signup(this.requestBody)        
           console.log(res);
-          this.navCtrl.navigateRoot('store');
+          this.presentAlert(this.requestBody);
         } catch (error) {
           console.error(error); 
 
@@ -113,8 +115,35 @@ export class SignupPage implements OnInit {
             // this.sys.presentToast('Ocorreu um erro ao efetuar o cadastro');
           }  
         }
-      }        
+      }      
+  }
 
+  async errorAlert(message) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+  }
+
+  async presentAlert(requestBody) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Cadastro realizado',
+      subHeader: `Um email de confirmação foi enviado para ${requestBody.user.email}.`,
+      message: `Se não receber o email em 15 minutos, procure na pasta de spam.`,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+    this.navCtrl.navigateRoot('home');
   }
 
   getErrorMsg(){
