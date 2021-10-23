@@ -79,13 +79,13 @@
     <ion-item lines="full" (click)="editVariable('price', 'Preço de venda', product.price, 'edit-money')">
       <ion-label>
         <p>Preço de venda</p>
-        <h2>R$ {{product.price}}</h2>
+        <h2>R$ {{product.price.toFixed(2).toString().replace('.', ',')}}</h2>
       </ion-label>      
     </ion-item>
     <ion-item lines="full" (click)="editVariable('cost', 'Custo', product.cost, 'edit-money')">
       <ion-label>
         <p>Custo</p>
-        <h2>R$ {{product.cost}}</h2>
+        <h2>R$ {{product.cost.toFixed(2).toString().replace('.', ',')}}</h2>
       </ion-label>      
     </ion-item>
     <!-- <ion-item lines="full" *ngIf="product.stockControl" (click)="editVariable('quantity', 'Quantidade', product.quantity)">
@@ -100,7 +100,7 @@
       <ion-toggle [(ngModel)]="product.stockControl" color="danger"  *ngIf="product.quantity == 0"></ion-toggle>
     </ion-item> -->
     <ion-item lines="none">
-      <ion-label>Visível para os clientes</ion-label>
+      <ion-label>Disponível</ion-label>
       <ion-toggle [(ngModel)]="product.available" color="primary" (ionChange)="availableToggled(product.available)"></ion-toggle>
     </ion-item>    
 

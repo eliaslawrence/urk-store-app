@@ -70,7 +70,7 @@ export class EditPhotosPage implements OnInit {
     return await popover.present();    
   }
 
-  private imageSelected(index){
+  imageSelected(index){
     this.product.images[index].selected = !this.product.images[index].selected;
     if(this.imgSelectedIndex != -1){
       this.product.images[this.imgSelectedIndex].selected = false;

@@ -13,6 +13,14 @@ const routes: Routes = [
     loadChildren: () => import('./edit-variable/edit-variable.module').then( m => m.EditVariablePageModule)
   },
   {
+    path: 'edit-description',
+    loadChildren: () => import('./edit-description/edit-description.module').then( m => m.EditDescriptionPageModule)
+  },
+  {
+    path: 'edit-account-name',
+    loadChildren: () => import('./edit-account-name/edit-account-name.module').then( m => m.EditAccountNamePageModule)
+  },
+  {
     path: 'edit-address',
     loadChildren: () => import('./edit-address/edit-address.module').then( m => m.EditAddressPageModule)
   },

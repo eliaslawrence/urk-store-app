@@ -9,3 +9,41 @@
         color: var(--ion-color-medium-shade);
     }
 }
+
+ion-segment {
+  box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px, rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px ;
+  z-index: 2;
+}
+
+.header-ios ion-toolbar:last-of-type {
+  --border-width: 0;
+}
+
+//START: Searchbar
+
+.sc-ion-searchbar-ios-h {
+  padding-bottom: 0;
+}
+
+.searchbar-search-icon {
+  display: none !important;
+}
+
+.toolbar .searchbar-md{
+  padding-left: 10px;
+}
+
+.searchbar-md .searchbar-input{
+  padding-left: 15px;
+  box-shadow: none;
+  border-radius: 22px;
+}
+
+.searchbar-md .searchbar-input::-webkit-input-placeholder {
+  font-weight: 100;
+}
+
+.searchbar-md .searchbar-search-icon{
+  background-size: 0px;
+}
+//END: Searchbar

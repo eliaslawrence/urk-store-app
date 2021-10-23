@@ -7,21 +7,32 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="!searchAble">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Produtos</ion-title>
+    <ion-title *ngIf="!searchAble">Produtos</ion-title>
+    <ion-buttons slot="end" id="products-search" *ngIf="!searchAble" style="margin: auto;">
+      <ion-button (click)="enableSearch()">
+        <ion-icon slot="icon-only" name="search-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-searchbar search-icon="undefined" mode="ios" inputmode="search" placeholder="Pesquisar" (ionInput)="search($event)" *ngIf="searchAble" class="searchbar" color="light"></ion-searchbar>
+    <ion-buttons slot="end" *ngIf="searchAble" style="margin: auto;">
+      <ion-button (click)="cancel()">
+        Cancelar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  <ion-segment [(ngModel)]="status" color="primary" class="segment-tab">
-    <ion-segment-button value="available">
+  <ion-segment [(ngModel)]="status" color="primary" mode="md" class="segment-tab">
+    <ion-segment-button value="available" (click)="getProducts()">
       <div class="text-inside-button">
         Disponível
       </div>
     </ion-segment-button>
-    <ion-segment-button value="unavailable">
+    <ion-segment-button value="unavailable" (click)="getProducts()">
       <div class="text-inside-button">
         Indisponível
       </div>
@@ -35,7 +46,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-fab vertical="bottom" horizontal="end">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="light" (click)="newProduct($event)">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -63,7 +74,7 @@
             </div>
 
             <div class="same-line">
-              <h2>R$ {{item.price}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
+              <h2>R$ {{item.price.toFixed(2).toString().replace('.', ',')}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
             </div>
           </ion-label>
           
@@ -93,7 +104,7 @@
             </div>
 
             <div class="same-line">
-              <h2>R$ {{item.price}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
+              <h2>R$ {{item.price.toFixed(2).toString().replace('.', ',')}}</h2> <!-- <p> x {{item.qty}}{{item.unity}}</p> -->
             </div>
           </ion-label>
                    
@@ -125,4 +136,8 @@
       </div>
     </ion-list> -->
   </div>
+  <ion-infinite-scroll threshold="100px" id="infinite-scroll" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loading-spinner="undefined">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

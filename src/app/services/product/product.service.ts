@@ -16,9 +16,9 @@ export class ProductService {
     return await this.requestService.get(uri, {}, "Buscando...");
   }
 
-  async findByUser() {
-    let uri = BASE_URI +'findByUser/';
-    return await this.requestService.get(uri, {}, "Buscando...");
+  async findByUser(limit,skip,available=true,text=undefined) {
+    let uri = BASE_URI +'findByUser/' + limit + '/' + skip  + '/' + available + '/' + (text == undefined ? '' : text);
+    return await this.requestService.get(uri, {}, null);
   }
 
   // UPDATE

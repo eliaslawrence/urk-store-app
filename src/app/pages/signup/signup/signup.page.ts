@@ -38,7 +38,7 @@ export class SignupPage implements OnInit {
       name: ['', Validators.required],
       // phoneNumber: ['', Validators.required],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(1)])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       password2: ['', Validators.compose([Validators.required, this.customValidator(this.user)])],
       // birthDate: ['', Validators.required],
       // gender: ['', Validators.required],      
@@ -81,11 +81,10 @@ export class SignupPage implements OnInit {
 
   private customValidator(user): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
-        if (control.value !== user.password) {
-            console.log(user.password);
-            return { 'isEqual': true };
-        }
+      if (control.value === user.password) {
         return null;
+      }
+      return { 'isEqual': true };
     };
   }
 
@@ -108,10 +107,12 @@ export class SignupPage implements OnInit {
         } catch (error) {
           console.error(error); 
 
-          if(error.error.code === 'E_VALIDATION'){
-            console.log('validation'); 
+          if(error.error.code === 'E_VALIDATION' || error.error.code === 'E_UNIQUE'){
+            console.log('validation');
+            this.errorAlert('Email já cadastrado'); 
             // this.sys.presentToast('Email já cadastrado');              
           } else {
+            this.errorAlert('Ocorreu um erro ao efetuar o cadastro'); 
             // this.sys.presentToast('Ocorreu um erro ao efetuar o cadastro');
           }  
         }
@@ -121,6 +122,7 @@ export class SignupPage implements OnInit {
   async errorAlert(message) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
+      mode: 'ios',
       message: message,
       buttons: ['OK']
     });
@@ -134,8 +136,9 @@ export class SignupPage implements OnInit {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Cadastro realizado',
+      mode: 'ios',
       subHeader: `Um email de confirmação foi enviado para ${requestBody.user.email}.`,
-      message: `Se não receber o email em 15 minutos, procure na pasta de spam.`,
+      message: `Se não receber o email dentro de 15 minutos, procure na pasta de spam.`,
       buttons: ['OK']
     });
 

@@ -29,7 +29,8 @@ export class EditTelephonePage implements OnInit {
               private router           : Router,
               public navCtrl           : NavController, 
               private telephoneService : TelephoneService,
-              private formBuilder      : FormBuilder) { 
+              private formBuilder      : FormBuilder
+              ) { 
 
   }
 
@@ -69,6 +70,8 @@ export class EditTelephonePage implements OnInit {
 
     if(this.storeForm.controls.number.valid){
       this.setItem(this.storeForm.value);
+    } else {
+      console.log(this.storeForm.controls);
     }
   }
 

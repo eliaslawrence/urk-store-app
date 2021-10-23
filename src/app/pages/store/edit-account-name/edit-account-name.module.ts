@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditTelephonePageRoutingModule } from './edit-telephone-routing.module';
+import { EditAccountNamePageRoutingModule } from './edit-account-name-routing.module';
 
-import { EditTelephonePage } from './edit-telephone.page';
+import { EditAccountNamePage } from './edit-account-name.page';
 
-import {NgxMaskModule} from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   imports: [
@@ -17,8 +17,8 @@ import {NgxMaskModule} from 'ngx-mask'
     IonicModule,
     ReactiveFormsModule,
     NgxMaskModule.forChild(),
-    EditTelephonePageRoutingModule
+    EditAccountNamePageRoutingModule
   ],
-  declarations: [EditTelephonePage]
+  declarations: [EditAccountNamePage]
 })
-export class EditTelephonePageModule {}
+export class EditAccountNamePageModule {}

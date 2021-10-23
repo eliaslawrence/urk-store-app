@@ -12,7 +12,7 @@ import { ProductService } from 'src/app/services/product/product.service';
 export class ProductPage implements OnInit {
 
   private id     : string;
-  private product: any = {images: [], code: '', name: '', description: '', cost: ''};
+  private product: any = {images: [], code: '', name: '', description: '', cost: 0, price: 0};
 
   constructor(private route         : ActivatedRoute,
               private router        : Router,

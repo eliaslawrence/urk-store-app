@@ -10,11 +10,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http"; // HTTP
 import { IonicStorageModule } from '@ionic/storage-angular';
+import {NgxMaskModule} from 'ngx-mask';
 //END: Module
 
 //START: Provider
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx'
 import { TokenInterceptorService } from './services/token-interceptor/token-interceptor.service';
 //END: Provider
 
@@ -26,11 +28,15 @@ import { TokenInterceptorService } from './services/token-interceptor/token-inte
     IonicModule.forRoot(), 
     AppRoutingModule,    
     HttpClientModule,
+    NgxMaskModule.forRoot({
+      dropSpecialCharacters: false
+    }),
     IonicStorageModule.forRoot()
   ],
   providers: [
     ScreenOrientation,
     SplashScreen,
+    StatusBar,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,

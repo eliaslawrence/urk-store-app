@@ -27,52 +27,55 @@
 <ion-content>
   <form [formGroup]="storeForm">
     <ion-list>    
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': cepFocus}">
         <ion-label position="stacked">CEP</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="cep" name="cep" (focus)="cepFocus=true" (blur)="cepFocus=false"
-                  [class.invalid-input]="!storeForm.controls.cep.valid && submitAttempt"></ion-input>
+        <!-- <ion-input type="text" maxlength="60" formControlName="cep" name="cep" (focus)="cepFocus=true" (blur)="cepFocus=false"
+                  [class.invalid-input]="!storeForm.controls.cep.valid && submitAttempt"></ion-input> -->
+
+        <input class="ion-input-style" type="text" formControlName="cep" name="cep" (focus)="cepFocus=true" (blur)="cepFocus=false" mask="00000-000"
+                  [class.invalid-input]="!storeForm.controls.cep.valid && submitAttempt" />
       </ion-item>
 
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': addressFocus}">
         <ion-label position="stacked">Endereço</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="address" name="address" (focus)="addressFocus=true" (blur)="addressFocus=false"
-                  [class.invalid-input]="!storeForm.controls.address.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" formControlName="address" name="address" (focus)="addressFocus=true" (blur)="addressFocus=false"
+                  [class.invalid-input]="!storeForm.controls.address.valid && submitAttempt" />
       </ion-item>
 
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': numberFocus}">
         <ion-label position="stacked">Número</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="number" name="number" (focus)="numberFocus=true" (blur)="numberFocus=false"
-                  [class.invalid-input]="!storeForm.controls.number.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="number" name="number" (focus)="numberFocus=true" (blur)="numberFocus=false" id="number-input"
+                  [class.invalid-input]="!storeForm.controls.number.valid && submitAttempt"/>
       </ion-item>
   
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': complementFocus}">
         <ion-label position="stacked">Complemento (Opcional)</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="complement" name="complement" (focus)="complementFocus=true" (blur)="complementFocus=false"
-                  [class.invalid-input]="!storeForm.controls.complement.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="complement" name="complement" (focus)="complementFocus=true" (blur)="complementFocus=false"
+                  [class.invalid-input]="!storeForm.controls.complement.valid && submitAttempt"/>
       </ion-item>
   
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': neighborhoodFocus}">
         <ion-label position="stacked">Bairro</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="neighborhood" name="neighborhood" (focus)="neighborhoodFocus=true" (blur)="neighborhoodFocus=false"
-                  [class.invalid-input]="!storeForm.controls.neighborhood.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="neighborhood" name="neighborhood" (focus)="neighborhoodFocus=true" (blur)="neighborhoodFocus=false"
+                  [class.invalid-input]="!storeForm.controls.neighborhood.valid && submitAttempt"/>
       </ion-item>
   
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': cityFocus}">
         <ion-label position="stacked">Cidade</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="city" name="city" (focus)="cityFocus=true" (blur)="cityFocus=false"
-                  [class.invalid-input]="!storeForm.controls.city.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="city" name="city" (focus)="cityFocus=true" (blur)="cityFocus=false"
+                  [class.invalid-input]="!storeForm.controls.city.valid && submitAttempt"/>
       </ion-item>
   
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': stateFocus}">
         <ion-label position="stacked">Estado</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="state" name="state" (focus)="stateFocus=true" (blur)="stateFocus=false"
-                  [class.invalid-input]="!storeForm.controls.state.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="state" name="state" (focus)="stateFocus=true" (blur)="stateFocus=false"
+                  [class.invalid-input]="!storeForm.controls.state.valid && submitAttempt"/>
       </ion-item>
   
-      <ion-item lines="none" class="focus-item validation-item">
+      <ion-item lines="none" class="focus-item validation-item" [ngClass]="{'item-input-has-focus': countryFocus}">
         <ion-label position="stacked">País</ion-label>
-        <ion-input type="text" maxlength="60" formControlName="country" name="country" (focus)="countryFocus=true" (blur)="countryFocus=false"
-                  [class.invalid-input]="!storeForm.controls.country.valid && submitAttempt"></ion-input>
+        <input class="ion-input-style" type="text" maxlength="60" formControlName="country" name="country" (focus)="countryFocus=true" (blur)="countryFocus=false"
+                  [class.invalid-input]="!storeForm.controls.country.valid && submitAttempt"/>
       </ion-item>
     </ion-list>       
   </form>

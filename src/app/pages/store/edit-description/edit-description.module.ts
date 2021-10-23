@@ -4,11 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditAddressPageRoutingModule } from './edit-address-routing.module';
+import { EditDescriptionPageRoutingModule } from './edit-description-routing.module';
 
-import { EditAddressPage } from './edit-address.page';
-
-import { NgxMaskModule } from 'ngx-mask';
+import { EditDescriptionPage } from './edit-description.page';
 
 @NgModule({
   imports: [
@@ -16,9 +14,8 @@ import { NgxMaskModule } from 'ngx-mask';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    NgxMaskModule.forChild(),
-    EditAddressPageRoutingModule
+    EditDescriptionPageRoutingModule
   ],
-  declarations: [EditAddressPage]
+  declarations: [EditDescriptionPage]
 })
-export class EditAddressPageModule {}
+export class EditDescriptionPageModule {}
