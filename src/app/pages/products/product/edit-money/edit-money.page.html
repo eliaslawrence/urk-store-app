@@ -29,7 +29,7 @@
         </h2>
       </ion-label>
 
-      <ion-input class="text-align-center padding-left-0" type="number" placeholder="Nome" formControlName="variable" name="variable" (focus)="variableFocus=true" (blur)="variableFocus=false"
+      <ion-input class="text-align-center padding-left-0" type="number" placeholder="{{pageTitle}}" formControlName="variable" name="variable" (focus)="variableFocus=true" (blur)="variableFocus=false"
                   [class.invalid-input]="!productForm.controls.variable.valid && submitAttempt"></ion-input>
     </ion-item>
   

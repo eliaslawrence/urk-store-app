@@ -16,3 +16,16 @@ npm install --save @ionic-native/file
 // File Transfer
 ionic cordova plugin add cordova-plugin-file-transfer
 npm install @ionic-native/file-transfer
+
+//Storage
+npm install --save @ionic/storage-angular
+
+//Splash Screen
+npm install @ionic-native/splash-screen
+
+//Mask
+npm install ngx-mask-ionic
+
+//Status Bar
+ionic cordova plugin add cordova-plugin-statusbar
+npm install @ionic-native/status-bar

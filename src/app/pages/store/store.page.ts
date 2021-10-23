@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { PopoverController } from '@ionic/angular';
-import { AddPhotoComponent } from './components/add-photo/add-photo.component';
+import { AlertController, NavController, PopoverController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { AddPhotoComponent } from 'src/app/components/add-photo/add-photo/add-photo.component';
+import { StoreService } from 'src/app/services/store/store.service';
 
 @Component({
   selector: 'app-store',
@@ -9,28 +11,37 @@ import { AddPhotoComponent } from './components/add-photo/add-photo.component';
   styleUrls: ['./store.page.scss'],
 })
 export class StorePage implements OnInit {
-  private store;
+  private store:any = {};
 
-  constructor(private router           : Router,
-              private popoverController: PopoverController,) {
-    this.store = this.getStore();
+  url1 = "http://192.168.15.5:1337/image/findById/";
+  url  = "192.168.15.5:1337/uploads/2a96f0e5-9a27-475e-a1ba-64c8771594b1.jpg";
+  imageURL;
+
+  constructor(private router            : Router,
+              private storeService      : StoreService,
+              private popoverController : PopoverController,
+              private navCtrl           : NavController) {
   }
 
   ngOnInit() {    
     // this.id = this.route.snapshot.paramMap.get('id');
     // console.log(this.id);
+    // this.getStore();
   }
 
   ionViewWillEnter(){
-    // this.store = this.getStore();//this.id);
+    this.getStore();//this.id);
   }
 
-  private getStore() {
-    let store;
+  private async getStore() {
+    try {
+      this.store = await this.storeService.findByUser();      
+      console.log(this.store);
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
 
-    //TODO: get store from DB (1)
-    if(!store){
-      store = {
+      this.store = {
         image: {src: 'assets/imgs/loja.jpg', name: 'cover.jpg'},
         categories: [{name: 'Alimentos', code: '1'},
           {name: 'Variados' , code: '2'}],
@@ -64,10 +75,7 @@ export class StorePage implements OnInit {
             placeID      : ''
           }
       };
-    }
-    /////////////////////////////////////////////////////////END (1)
-
-    return store;
+    }    
   }  
 
   private editItem(name, pageTitle, item = undefined) {
@@ -96,11 +104,10 @@ export class StorePage implements OnInit {
     this.router.navigate(['store/edit-address'], navigationExtras);
   }
 
-  editTelephone(index) {    
+  editTelephone(telephone) {    
     let navigationExtras: NavigationExtras = {
       state : {
-        index     : index,
-        list      : this.store.telephones,
+        item      : telephone,
         name      : 'telephones',
         pageTitle : 'Telefone',
         storeId   : this.store.id
@@ -129,9 +136,22 @@ export class StorePage implements OnInit {
       componentProps: {store: this.store},
       showBackdrop: true,
       cssClass: 'custom-popover'
-    });    
+    });   
+    
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      if(data.data){
+        this.storeService.updateImage({file:data.data}).then(()=>{
+          this.getStore();
+        }).catch((error)=>{
+          console.log(error);
+        }); 
+      }         
+    }).catch((error)=>{
+      console.log(error);
+    }); 
 
-    return await popover.present();    
+    await popover.present();
   }
 
 }

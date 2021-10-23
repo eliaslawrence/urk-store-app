@@ -3,8 +3,8 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
-          <ion-list-header>Lojinha do Sr. Raimundo</ion-list-header>
-          <ion-note>raimundo@lojinharaimundo.com</ion-note>
+          <ion-list-header>{{store ? store.name : 'Loja'}}</ion-list-header>
+          <ion-note>{{user ? user.email : ''}}</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
@@ -17,7 +17,7 @@
 
       <ion-footer>
         <ion-toolbar>
-          <ion-item lines="none" detail="false" [routerLink]="['']">
+          <ion-item lines="none" detail="false" (click)="logout()">
             <ion-icon slot="start" name="log-out"></ion-icon>
             <ion-label>Sair</ion-label>
           </ion-item>    

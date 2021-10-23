@@ -5,11 +5,13 @@ ion-card {
     height: 200px;
     width: 100% !important;
     border-radius: 0;
-}
 
-img{
-    min-height: 200px;
-    filter: brightness(50%);
+    img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        filter: brightness(50%);
+    }
 }
 
 .card-title {

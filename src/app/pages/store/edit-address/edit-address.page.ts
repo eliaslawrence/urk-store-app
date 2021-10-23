@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import { AddressService } from 'src/app/services/address/address.service';
 
 @Component({
   selector: 'app-edit-address',
@@ -24,17 +25,16 @@ export class EditAddressPage implements OnInit {
   private address;
   private storeId: string;
 
-  constructor(private route         : ActivatedRoute,
-              private router        : Router,
-              public navCtrl        : NavController, 
-              // private addressService: AddressService,
-              // private storeService  : StoreService,
-              private formBuilder   : FormBuilder) { 
+  constructor(private route           : ActivatedRoute,
+              private router          : Router,
+              public navCtrl          : NavController, 
+              private addressService  : AddressService,
+              private alertController : AlertController,
+              private formBuilder     : FormBuilder) { 
 
   }
 
-  ngOnInit() {
-
+  ngOnInit() {  
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {        
         this.name      = this.router.getCurrentNavigation().extras.state.name;
@@ -80,7 +80,7 @@ export class EditAddressPage implements OnInit {
           });
         }
       }
-    });        
+    });         
 
   }
 
@@ -98,34 +98,73 @@ export class EditAddressPage implements OnInit {
 
       this.setItem(this.storeForm.value);
       
+    } else {
+      console.error(this.getErrorMsg());
+      this.errorAlert(this.getErrorMsg());
     }
   }
 
   private setItem(value){    
     if(this.newItem){
-      this.create(value);
+      this.add(value);
     } else {
       this.save(value);
     }   
   }
 
-  private create(newName){  
-    
-    // this.storeService.addConducts(this.storeId, namesArray).then(() => {   
+  private async add(newVariableJSON){    
+    try {
+      await this.addressService.create(this.storeId, newVariableJSON);
       this.navCtrl.pop();
-    // }, err => {
-      // console.log(err);
-      // console.log("Não foi possível carregar o feed principal");
-    // });    
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
   }
 
-  private save(newName){    
-    // this.storeService.updateName(this.address['id'], newName).then(() => {   
+  private async save(variableJSON){    
+    try {
+      await this.addressService.updateAttribute(this.address.id, variableJSON);
       this.navCtrl.pop();
-    // }, err => {
-      // console.log(err);
-      // console.log("Não foi possível carregar o feed principal");
-    // });    
-  } 
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
+  }
+
+  getErrorMsg(){
+    const controls = this.storeForm.controls;      
+
+    if(controls.cep.invalid){
+      return "Campo CEP obrigatório"
+    } else if (controls.address.invalid) {
+      return "Campo Endereço obrigatório"
+    } else if (controls.number.invalid) {
+      return "Campo Número obrigatório"
+    } else if (controls.neighborhood.invalid) {
+      return "Campo Bairro obrigatório"
+    } else if (controls.city.invalid) {
+      return "Campo Cidade obrigatório"
+    } else if (controls.state.invalid) {
+      return "Campo Estado obrigatório"
+    } else if (controls.country.invalid) {
+      return "Campo País obrigatório"
+    } else {
+      return "Verifique os campos preenchidos"
+    }
+  }
+
+  async errorAlert(message) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      mode: 'ios',
+      subHeader: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+  }
 
 }

@@ -8,12 +8,15 @@ import { EditTelephonePageRoutingModule } from './edit-telephone-routing.module'
 
 import { EditTelephonePage } from './edit-telephone.page';
 
+import {NgxMaskModule} from 'ngx-mask'
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
+    NgxMaskModule.forChild(),
     EditTelephonePageRoutingModule
   ],
   declarations: [EditTelephonePage]

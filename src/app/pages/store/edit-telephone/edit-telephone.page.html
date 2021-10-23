@@ -23,15 +23,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content>  
   <form [formGroup]="storeForm">
     <ion-item lines="none" style="padding-left: 0; width: 90%; margin: auto; background-color: transparent; margin-top: 50px"  class="focus-item validation-item">
-      <ion-input type="text" maxlength="60" placeholder="{{pageTitle}}" formControlName="item" name="item" (focus)="itemFocus=true" (blur)="itemFocus=false"
-                  [class.invalid-input]="!storeForm.controls.item.valid && submitAttempt"></ion-input>
+      <input type="tel" maxlength="60" placeholder="{{pageTitle}}" formControlName="number" name="number" (focus)="itemFocus=true" (blur)="itemFocus=false" mask="(00) 0000-0000 || (00) 0000-00000" class="ion-input-style"
+                  [class.invalid-input]="!storeForm.controls.number.valid && submitAttempt"/>
     </ion-item>
 
     <div style="margin: auto; width: 90%; margin-top: 5px;">
-      <div style="float: left; color: #f53d3d; font-size: 0.9rem; padding-left: 8px" *ngIf="!storeForm.controls.item.valid && !itemFocus && (storeForm.controls.item.dirty || submitAttempt)">Nome inválido</div>        
+      <div style="float: left; color: #f53d3d; font-size: 0.9rem; padding-left: 8px" *ngIf="!storeForm.controls.number.valid && !itemFocus && (storeForm.controls.number.dirty || submitAttempt)">Telefone inválido</div>        
     </div>    
 
     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">

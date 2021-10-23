@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
-import { AddPhotoComponent } from './components/add-photo/add-photo.component';
+import { ProductService } from 'src/app/services/product/product.service';
+import { ProductImageService } from 'src/app/services/product/productImage/product-image.service';
+import { AddPhotoComponent } from 'src/app/components/add-photo/add-photo/add-photo.component';
 
 @Component({
   selector: 'app-edit-photos',
@@ -12,6 +14,7 @@ export class EditPhotosPage implements OnInit {
 
   private product          : any;
   private imgSelectedIndex : number = -1;
+  url = 'http://192.168.15.5:1337/image/findById/';
 
   constructor(private router : Router,
               private route  : ActivatedRoute,
@@ -19,7 +22,9 @@ export class EditPhotosPage implements OnInit {
               // private requestProvider: RequestProvider,
               // private loadingCtrl: LoadingController,
               // private toastCtrl: ToastController,
-              public popoverController: PopoverController
+              private productService      : ProductService,
+              private productImageService : ProductImageService,
+              public popoverController    : PopoverController
               ) { }
 
   ngOnInit() {
@@ -31,6 +36,16 @@ export class EditPhotosPage implements OnInit {
 
   }
 
+  async getProduct(id: string){      
+    try {
+      this.product = await this.productService.findById(id); 
+      console.log(this.product);  
+    } catch (error) {
+      console.error(error);
+      console.log("Não foi possível carregar o feed principal");
+    }
+  }
+
   async addPhoto(){
     const popover = await this.popoverController.create({
       component: AddPhotoComponent,
@@ -39,10 +54,23 @@ export class EditPhotosPage implements OnInit {
       cssClass: 'custom-popover'
     });    
 
+    popover.onDidDismiss().then((data) => {
+      console.log(data);
+      if(data.data){
+        this.productService.addImage(this.product.id, {file:data.data}).then(()=>{
+          this.getProduct(this.product.id);
+        }).catch((error)=>{
+          console.log(error);
+        });    
+      }           
+    }).catch((error)=>{
+      console.log(error);
+    });
+
     return await popover.present();    
   }
 
-  private imageSelected(index){
+  imageSelected(index){
     this.product.images[index].selected = !this.product.images[index].selected;
     if(this.imgSelectedIndex != -1){
       this.product.images[this.imgSelectedIndex].selected = false;
@@ -53,6 +81,16 @@ export class EditPhotosPage implements OnInit {
       // this.presentToast(this.product.images[index].src);
     }else{
       this.imgSelectedIndex = -1;
+    }
+  }
+
+  private async deleteImage(index){
+    try {
+      await this.productImageService.remove({productImage: {product: this.product.id, image: this.product.images[index].id}});
+      this.imgSelectedIndex = -1;
+      await this.getProduct(this.product.id); 
+    } catch (error) {
+      console.error(error);
     }
   }
 }

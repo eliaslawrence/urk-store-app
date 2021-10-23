@@ -15,25 +15,32 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-buttons slot="end">      
+    <ion-buttons slot="end"> 
+      <ion-button (click)="addPhoto()">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>     
       <ion-button (click)="delete()">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card class="crop-image-container">   
+    <img [src]="product && product.coverImage ? product.coverImage.url : 'assets/imgs/no-image.png'" onerror="this.src='assets/imgs/no-image.png'"/>    
+  </ion-card>
   <ion-item-divider color="light" class="border-none">
     Fotos
   </ion-item-divider>
-  <div class="photoslide" *ngIf="product.images && product.images.length > 0" (click)="editPhotos()">
+  <div class="photoslide" *ngIf="product && product.images && product.images.length > 0" (click)="editPhotos()">
     <div *ngFor="let image of product.images; let i = index">
-      <img src="{{image.src}}">
+      <!-- <img src="{{image.src}}"> -->
+      <img [src]="image.url" onerror="this.src='assets/imgs/sm.jpg'"/>
     </div>
   </div>
 
-  <ion-item lines="none" *ngIf="!product.images || product.images.length == 0" (click)="editPhotos()">
+  <ion-item lines="none" *ngIf="!product || !product.images || product.images.length == 0" (click)="editPhotos()">
     <ion-label>
       <p>Adicionar fotos</p>
     </ion-label>    
@@ -72,13 +79,13 @@
     <ion-item lines="full" (click)="editVariable('price', 'Preço de venda', product.price, 'edit-money')">
       <ion-label>
         <p>Preço de venda</p>
-        <h2>R$ {{product.price}}</h2>
+        <h2>R$ {{product.price.toFixed(2).toString().replace('.', ',')}}</h2>
       </ion-label>      
     </ion-item>
     <ion-item lines="full" (click)="editVariable('cost', 'Custo', product.cost, 'edit-money')">
       <ion-label>
         <p>Custo</p>
-        <h2>R$ {{product.cost}}</h2>
+        <h2>R$ {{product.cost.toFixed(2).toString().replace('.', ',')}}</h2>
       </ion-label>      
     </ion-item>
     <!-- <ion-item lines="full" *ngIf="product.stockControl" (click)="editVariable('quantity', 'Quantidade', product.quantity)">
@@ -93,8 +100,8 @@
       <ion-toggle [(ngModel)]="product.stockControl" color="danger"  *ngIf="product.quantity == 0"></ion-toggle>
     </ion-item> -->
     <ion-item lines="none">
-      <ion-label>Disponível para venda</ion-label>
-      <ion-toggle [(ngModel)]="product.salesAvailable" color="primary" checked="false" (ionChange)="availableToggled(product.salesAvailable)"></ion-toggle>
+      <ion-label>Disponível</ion-label>
+      <ion-toggle [(ngModel)]="product.available" color="primary" (ionChange)="availableToggled(product.available)"></ion-toggle>
     </ion-item>    
 
     <!-- <ion-item-divider color="light" class="border-none">

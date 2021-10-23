@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { TelephoneService } from 'src/app/services/telephone/telephone.service';
 
 @Component({
   selector: 'app-edit-telephone',
@@ -21,15 +22,15 @@ export class EditTelephonePage implements OnInit {
   newItem: boolean;
   itemFocus: boolean;
 
-  private list;
+  private item;
   private storeId: string;
 
-  constructor(private route         : ActivatedRoute,
-              private router        : Router,
-              public navCtrl        : NavController, 
-              // private addressService: AddressService,
-              // private storeService  : StoreService,
-              private formBuilder   : FormBuilder) { 
+  constructor(private route            : ActivatedRoute,
+              private router           : Router,
+              public navCtrl           : NavController, 
+              private telephoneService : TelephoneService,
+              private formBuilder      : FormBuilder
+              ) { 
 
   }
 
@@ -39,28 +40,21 @@ export class EditTelephonePage implements OnInit {
       if (this.router.getCurrentNavigation().extras.state) {        
         this.name      = this.router.getCurrentNavigation().extras.state.name;
         this.pageTitle = this.router.getCurrentNavigation().extras.state.pageTitle;
-        this.list      = this.router.getCurrentNavigation().extras.state.list;
-        this.index     = this.router.getCurrentNavigation().extras.state.index;
-        this.storeId   = this.router.getCurrentNavigation().extras.state.patientId;
+        this.item      = this.router.getCurrentNavigation().extras.state.item;        
+        this.storeId   = this.router.getCurrentNavigation().extras.state.storeId;
 
 
-        if(this.index >= 0){
+        if(this.item){
           this.storeForm = this.formBuilder.group({      
-            item: [this.list[this.index], Validators.compose([Validators.required])],
-          });
-
-          if(!isNaN(this.storeForm.value.item)){
-            this.isNumber = true;
-          }
+            number: [this.item.number, Validators.compose([Validators.required])],
+          });          
         }else{
           this.newItem = true;
 
           this.storeForm = this.formBuilder.group({      
-            item: ['', Validators.compose([Validators.required])],
+            number: ['', Validators.compose([Validators.required])],
           });
         }
-
-        console.log(this.storeForm.value.item);
       }
     });        
 
@@ -68,46 +62,55 @@ export class EditTelephonePage implements OnInit {
 
   deleteItem(){
     this.submitAttempt = true;
-
-    let newList = [...this.list];
-    newList.splice(this.index, 1);
-
-    this.setVariable(newList);
+    this.delete();
   }
 
   saveItem(){
     this.submitAttempt = true;
 
-    if(this.storeForm.controls.item.valid){      
-      this.setItem(this.storeForm.value.item);
+    if(this.storeForm.controls.number.valid){
+      this.setItem(this.storeForm.value);
+    } else {
+      console.log(this.storeForm.controls);
     }
   }
 
-  private setItem(value){   
-    let newList = [...this.list];
-
+  private setItem(value){    
     if(this.newItem){
-      newList.push(value);
+      this.add(value);
     } else {
-      newList[this.index] = value;
+      this.save(value);
     }   
-
-    this.setVariable(newList);
   }
 
-  private setVariable(variable){
-    this.save({[this.name]: variable});
-  }
-
-  private save(variableJSON){ 
-    //TODO: request (conexao back-front)   
-    // this.patientService.updateAttribute(this.storeId, variableJSON).then(() => {  
-      console.log(variableJSON); 
+  private async add(newVariableJSON){    
+    try {
+      await this.telephoneService.create(this.storeId, newVariableJSON);
       this.navCtrl.pop();
-    // }, err => {
-    //   console.log(err);
-    //   console.log("Não foi possível carregar o feed principal");
-    // });    
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
+  }
+
+  private async save(variableJSON){    
+    try {
+      await this.telephoneService.updateAttribute(this.item.id, variableJSON);
+      this.navCtrl.pop();
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
+  }
+
+  private async delete(){    
+    try {
+      await this.telephoneService.delete(this.item.id);
+      this.navCtrl.pop();
+    } catch (error) {
+      console.log(error);
+      console.log("Não foi possível carregar o feed principal");
+    }     
   }
 
 }

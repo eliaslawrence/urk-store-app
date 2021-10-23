@@ -14,14 +14,24 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Minha Loja</ion-title>
+
+    <ion-buttons slot="end">      
+      <ion-button (click)="addPhoto()">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="crop-image-container"  (click)="addPhoto()">
-    <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" />
-    <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->
-    <!-- <img [src]="storeProvider.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/sm.jpg'"/> -->
+  <ion-card class="crop-image-container">
+    <!-- <img [src]="store['image'].src" onerror="this.src='assets/imgs/loja.jpg'" *ngIf="store && store.image"/>     -->    
+    <!-- <img src="{{url + store.coverImage}}"/> -->
+    <!-- <img [src]="imageUrl" onerror="this.src='assets/imgs/loja.jpg'"/> -->
+    <!-- <img src="assets/imgs/loja.jpg" *ngIf="!store || !store.image"/> -->
+    <!--<img src="assets/imgs/sm.jpg"          *ngIf="imgURL === ''"/>-->    
+    <img [src]="store && store.coverImage ? store.coverImage.url : 'assets/imgs/no-image.png'" onerror="this.src='assets/imgs/no-image.png'"/>
+    <!-- <img [src]="storeService.getImageURL() + store['coverImage']" onerror="this.src='assets/imgs/loja.jpg'"/> -->
     <div class="card-title">{{store ? store.name : 'Loja'}}</div>
   </ion-card>
   
@@ -38,25 +48,32 @@
         <p>{{store ? store.name : ''}}</p>
       </ion-label>       
     </ion-item>
-    <ion-item (click)="editVariable('accountName', 'Nome da Conta', store.accountName)" lines="none">
+    <ion-item (click)="editVariable('accountName', 'Nome da Conta', store.accountName, 'edit-account-name')" lines="full">
       <ion-label>
         <h2>Nome da conta</h2>
         <p>@{{store ? store.accountName : ''}}</p>
       </ion-label>      
-    </ion-item>    
+    </ion-item> 
+    <ion-item lines="none" (click)="editVariable('description', 'Descrição', store.description, 'edit-description')">
+      <ion-label>
+        <h2>Descrição</h2>
+        
+          <p class="line-break">{{store.description}}</p>
+      </ion-label>      
+    </ion-item>   
     <ion-item-divider color="light" class="border-none">
       <ion-label>
         Telefones
       </ion-label>      
     </ion-item-divider>
     <span *ngIf="store">
-      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(i)" lines="full">
+      <ion-item *ngFor="let telephone of store.telephones; let i = index" (click)="editTelephone(telephone)" lines="full">
         <ion-label>
-          <h2>{{telephone}}</h2>
+          <h2>{{ telephone.number }}</h2>
         </ion-label>        
       </ion-item>
     </span>    
-    <ion-item (click)="editTelephone(-1)" lines="none">
+    <ion-item (click)="editTelephone()" lines="none">
       <ion-label>
         <p>Adicionar telefone</p>
       </ion-label>      
@@ -69,8 +86,9 @@
     </ion-item-divider>
     <ion-item (click)="editAddress()" *ngIf="store.address" lines="none">
       <ion-label>
-        <h2>{{store.address.address}} {{store.address.number}}{{store.address.complement ? ', ' + store.address.complement : ''}}</h2>
-        <p>{{store.address.cep}} - {{store.address.city}} - {{store.address.state }}</p>
+        <h2>{{store.address.address}} {{store.address.number}}{{store.address.complement ? ', ' + store.address.complement : ''}} - {{store.address.neighborhood}}</h2>
+        <h3>{{store.address.city}}, {{store.address.state }}</h3>
+        <p>{{store.address.cep}}</p>
       </ion-label>      
     </ion-item>
     <ion-item (click)="editAddress()" *ngIf="!store.address" lines="none">

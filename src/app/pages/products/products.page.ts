@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { ProductService } from 'src/app/services/product/product.service';
 
 @Component({
   selector: 'app-products',
@@ -8,42 +9,96 @@ import { NavController } from '@ionic/angular';
 })
 export class ProductsPage implements OnInit {
 
+  limit = 10;
+  lastLength;
+  searchText = undefined;
+  searchAble : Boolean = false;
   status = "available";
-  products: Array<any>;
+  products: Array<any> = [];
 
-  constructor(public navCtrl: NavController) { 
-    this.products = this.getProducts();
+  constructor(public navCtrl         : NavController,
+              private productService : ProductService) { 
   }
 
   ngOnInit() {
   }
 
-  private getProducts() {
-
-    //TODO: get store from DB (1)
-    let products = [
-      { productName: 'Bolo de Chocolate XYZ', code: '000054578/001', date: '2 de maio às 12:24', price: 5.99, qty: 200, unity: 'u', available: true , hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "https://www.tvgazeta.com.br/wp-content/uploads/2017/12/bolo.pelo_.amor_.YT_-1024x709.jpg"}, {src: "http://192.168.25.4:8887/volley.png"}]},
-      { productName: 'Pastel de Queijo'     , code: '157054578/002', date: '3 de maio às 22:55', price: 5.99, qty: 200, unity: 'u', available: false, hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Bolo de Chocolate X'  , code: '000054578/001', date: '2 de maio às 12:24', price: 5.99, qty: 200, unity: 'u', available: false, hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Torta'                , code: '157054578/002', date: '3 de maio às 22:55', price: 5.99, qty: 200, unity: 'u', available: true , hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: []},
-      { productName: 'Coxinha'              , code: '000054578/001', date: '2 de maio às 12:24', price: 5.99, qty: 200, unity: 'u', available: true , hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Pizza de Calabresa'   , code: '157054578/002', date: '3 de maio às 22:55', price: 5.99, qty: 200, unity: 'u', available: true , hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Pizza de Mussarela'   , code: '000054578/001', date: '2 de maio às 12:24', price: 5.99, qty: 200, unity: 'u', available: false, hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Pizza 4 Queijos'      , code: '157054578/002', date: '3 de maio às 22:55', price: 5.99, qty: 200, unity: 'u', available: false, hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-      { productName: 'Empadinha'            , code: '000054578/001', date: '2 de maio às 12:24', price: 5.99, qty: 0, unity: 'u', available: true , hasStock: false, description: 'Bolo com recheio e cobertura de chocolate de raio de 10cm', imagesList: [{src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}, {src: "assets/imgs/cake.jpg", name: "cake.jpg"}]},
-    ];
-    ///////////////////////////////////////////////////////////END (1)
-
-    return products;
+  ionViewWillEnter(){
+    // console.log("ionViewWillEnter");
+    // console.log("ionViewWillEnter");
+    // console.log("ionViewWillEnter");
+    this.getProducts();
   }
 
-  itemTapped(code) {       
-    this.navCtrl.navigateForward('products/product/' + code);
+  search(ev){
+    // set val to the value of the searchbar
+    this.searchText = ev.target.value.toLowerCase();
+    this.getProducts();
+  }
+
+  async getProducts() {
+
+    try {
+      this.products = await this.productService.findByUser(this.limit,0,this.status == "available",this.searchText);
+      console.log(this.products);  
+      this.lastLength = this.products.length;          
+    } catch (error) {
+      console.error(error);
+      console.log("Não foi possível carregar o feed principal");
+    } 
+  }
+
+  itemTapped(id) {      
+    this.navCtrl.navigateForward('products/product/' + id);
+    // this.searchAble = false;
   }
 
   async newProduct() {
-    // let newGroup = await this.medGroupService.newMedGroup();
-    // this.groups.push(newGroup);
+    try {
+      let newProduct = await this.productService.createEmpty();
+      this.itemTapped(newProduct.id);
+      // this.products.push(newProduct);
+      // this.lastLength = this.products.length;
+    } catch (error) {
+      console.error(error) ;
+    }
+  }
+
+  private enableSearch() {      
+    this.searchAble = true;
+  }
+
+  private cancel(){
+    // Reset items back to all of the items
+    this.searchText = undefined;
+    this.getProducts();
+    this.searchAble = false;
+  }
+
+  loadData(event) {
+    setTimeout(() => {
+      console.log('Done');
+      event.target.complete();
+
+      this.appendItems(this.limit);
+
+      // App logic to determine if all data is loaded
+      // and disable the infinite scroll
+      if (this.products.length == this.lastLength) {
+        console.log('No More Data');
+        // event.target.disabled = true;
+      }
+    }, 500);
+  }
+
+  async appendItems(number) {
+    try {
+      let newProducts = await this.productService.findByUser(number,this.products.length,this.status == "available",this.searchText);
+      this.products = this.products.concat(newProducts);          
+    } catch (error) {
+      console.error(error);
+      console.log("Não foi possível carregar o feed principal");
+    } 
   }
 
 }
