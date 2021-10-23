@@ -1,4 +1,4 @@
-# URK Store
+# URK Store (Available on [Play Store](https://play.google.com/store/apps/details?id=com.urk.store))
 
 Create your virtual store and promote your products for free. Urk is a platform that replaces, in a more professional and organized way, social networks and telephones to promote products.
 
@@ -21,10 +21,10 @@ The application brings the advantages of advertising the marketplace and the per
 - Mask
 
 
-## Application (Available on [Play Store](https://play.google.com/store/apps/details?id=com.urk.store))
+## Application
 
 <p align="center">
-    <img src="/imgs/features.png" width="300">
+    <img src="/imgs/features.png" width="500">
 </p>
 
 - Digital insert. Advertise products and prices.
